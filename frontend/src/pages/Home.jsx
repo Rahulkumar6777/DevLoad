@@ -8,3 +8,14 @@ export const Home = () => {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [activeFeature, setActiveFeature] = useState(0);
   const [stats, setStats] = useState({ files: 0, projects: 0, users: 0 });
+
+    useEffect(() => {
+    const interval = setInterval(() => {
+      setStats(prev => ({
+        files: prev.files < 15420 ? prev.files + 147 : 15420,
+        projects: prev.projects < 342 ? prev.projects + 3 : 342,
+        users: prev.users < 128 ? prev.users + 1 : 128
+      }));
+    }, 50);
+    return () => clearInterval(interval);
+  }, []);
