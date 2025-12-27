@@ -433,7 +433,7 @@ export const Home = () => {
               <a href="/documentation" className="text-gray-400 hover:text-cyan-400 transition-colors">Docs</a>
               <a href="/pricing" className="text-gray-400 hover:text-cyan-400 transition-colors">Pricing</a>
               <a href="/about" className="text-gray-400 hover:text-cyan-400 transition-colors">About</a>
-              <a href="/terms" className="text-gray-400 hover:text-cyan-400 transition-colors">Terms</a>
+              <a href="/term" className="text-gray-400 hover:text-cyan-400 transition-colors">Terms</a>
             </div>
           </div>
         </div>
