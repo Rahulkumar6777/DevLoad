@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - 'frontend/**'            # Only trigger when frontend changes
-      - '.github/workflows/**'   # Optional: allow workflow edits to trigger
+      - 'frontend/**'            
+      - '.github/workflows/**' 
 
 jobs:
   # ---- Build job ----
