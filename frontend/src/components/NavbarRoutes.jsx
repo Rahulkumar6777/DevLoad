@@ -1,6 +1,6 @@
 const navbarRoutes = [
   "/",
-  "/price",
+  "/pricing",
   "/about",
   "/developers",
 ];
