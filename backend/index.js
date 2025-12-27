@@ -79,7 +79,7 @@ app.use(compression());
 
 
 //// Middleware to count requests
-import { requestCounter } from "./src/middleware/serverLogger.middleware.js";
+import { requestCounter, startServerLogger } from "./src/middleware/serverLogger.middleware.js";
 app.use(requestCounter);
 
 
