@@ -78,6 +78,11 @@ import compression from "compression";
 app.use(compression());
 
 
+//// Middleware to count requests
+import { requestCounter } from "./src/middleware/serverLogger.middleware.js";
+app.use(requestCounter);
+
+
 // client monitoring middleware
 import {UAParser} from 'ua-parser-js';
 export function monitoringMiddleware(req, res, next) {
