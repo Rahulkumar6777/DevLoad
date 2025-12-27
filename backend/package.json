@@ -16,5 +16,35 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bullmq": "^5.66.3",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dockerode": "^4.0.9",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "express-validator": "^7.3.1",
+    "handlebars": "^4.7.8",
+    "helmet": "^8.1.0",
+    "hpp": "^0.2.3",
+    "ioredis": "^5.8.2",
+    "jsonwebtoken": "^9.0.3",
+    "mine": "^0.1.0",
+    "mongo-sanitize": "^1.1.0",
+    "mongoose": "^9.0.2",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "node-os-utils": "^2.0.1",
+    "nodemailer": "^7.0.12",
+    "open": "^11.0.0",
+    "pidusage": "^4.0.1",
+    "razorpay": "^2.9.6",
+    "redis": "^5.10.0",
+    "sanitize-html": "^2.17.0",
+    "ua-parser-js": "^2.0.7"
   }
 }
