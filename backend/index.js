@@ -10,7 +10,7 @@ configDotenv();
 
 //database connection
 import { connectDb } from "./src/configs/db.connect.js";
-connectDb();
+await connectDb();
 
 
 // redis connection
@@ -76,6 +76,41 @@ app.use(cookieParser());
 // compression middleware
 import compression from "compression";
 app.use(compression());
+
+
+// // monitoringMiddleware.js
+import osu from 'node-os-utils';
+import pidusage from 'pidusage';
+import {UAParser} from 'ua-parser-js';
+
+const cpu = osu.cpu;
+const mem = osu.mem;
+
+
+// Monitoring middleware
+export async function monitoringMiddleware(req, res, next) {
+  try {
+    const parser = new UAParser(req.headers['user-agent']);
+    const clientInfo = parser.getResult();
+
+    const cpuUsage = await cpu.usage();
+    const memInfo = await mem.info();
+    const processStats = await pidusage(process.pid);
+
+    req.monitoring = {
+      client: clientInfo,
+      server: {
+        cpu: cpuUsage,
+        memory: memInfo,
+        process: processStats
+      }
+    };
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
 
 
 // Error handling middleware
