@@ -1,5 +1,5 @@
 // serverLogger.js
-import osu from 'node-os-utils';
+import * as osu from 'node-os-utils';
 import pidusage from 'pidusage';
 
 const cpu = osu.cpu;
