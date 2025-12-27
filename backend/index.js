@@ -48,5 +48,9 @@ import cookieParser from "cookie-parser";
 app.use(cookieParser());
 
 
+// compression middleware
+import compression from "compression";
+app.use(compression());
+
 
 export { app}
