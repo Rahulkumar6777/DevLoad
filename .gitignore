@@ -1,3 +1,5 @@
-seo-frontend/node_modules
-seo-frontend/dist
-seo-frontend/.gitignore
+frontend/node_modules
+frontend/dist
+frontend/.gitignore
+backend/node_modules
+backend/.env
