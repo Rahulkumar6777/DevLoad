@@ -7,7 +7,7 @@ configDotenv();
 
 
 //database connection
-import { connectDb } from "./src/configs/db.connect";
+import { connectDb } from "./src/configs/db.connect.js";
 connectDb();
 
 
@@ -15,12 +15,27 @@ connectDb();
 import './src/configs/redis.connect.js';
 
 
+// make a express app
+const app = express();
+
+
 // middleware of express parsing
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 
-const app = express();
+// important security middlewares import path
+import hpp from "hpp";
+import helmet from "helmet";
+import { xssSanitizeRequest } from "./src/middleware/xssSanitizeMiddleware.js";
+import { sanitizeRequest } from "./src/middleware/sanitizeMiddleware.js";
+
+
+// uses on security middlewares
+app.use(hpp())
+app.use(helmet())
+app.use(xssSanitizeRequest)
+app.use(sanitizeRequest)
 
 
 export { app}
