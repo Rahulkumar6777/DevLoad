@@ -109,4 +109,8 @@ app.use((err, req, res, next) => {
 });
 
 
+//// Start background logger (every 5 seconds for dev and 1 hr for production)
+startServerLogger(5000);
+
+
 export { app , server , io}
