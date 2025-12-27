@@ -53,4 +53,9 @@ import compression from "compression";
 app.use(compression());
 
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Internal Server Error" });
+});
 export { app}
