@@ -11,6 +11,11 @@ import { connectDb } from "./src/configs/db.connect";
 connectDb();
 
 
+
+// middleware of express parsing
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
 const app = express();
 
 
