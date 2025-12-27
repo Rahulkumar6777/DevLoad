@@ -109,8 +109,12 @@ app.use((err, req, res, next) => {
 });
 
 
-//// Start background logger (every 5 seconds for dev and 1 hr for production)
-startServerLogger(5000);
+//// Start background logger
+const interval = process.env.NODE_ENV === "production" ? 7200000 : 300000;
+
+setInterval(() => {
+  startServerLogger(interval);
+}, interval);
 
 
 export { app , server , io}
