@@ -1,4 +1,6 @@
 import express from "express";
+import http from "http";
+import { Server} from "socket.io";
 
 
 // dotenv configuration
@@ -23,6 +25,23 @@ const app = express();
 import cors from "cors";
 import { corsOptions } from "./src/utils/corsoption.utils.js";
 app.use(cors(corsOptions));
+
+
+// make server for socket.io
+const server = http.createServer(app);
+const io = new Server(server , {
+    cors: corsOptions 
+})
+
+
+// connection on socket
+io.on("connection" , (socket) => {
+    console.log("user connected")
+
+    socket.on("disconnect" , async () => {
+        console.log('user disconnected')
+    })
+})
 
 
 // middleware of express parsing
