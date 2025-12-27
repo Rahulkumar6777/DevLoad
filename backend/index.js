@@ -38,4 +38,9 @@ app.use(xssSanitizeRequest)
 app.use(sanitizeRequest)
 
 
+// logging middleware
+import morgan from "morgan";
+app.use(morgan("combined"));
+
+
 export { app}
