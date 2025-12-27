@@ -19,6 +19,12 @@ import './src/configs/redis.connect.js';
 const app = express();
 
 
+// cors middleware
+import cors from "cors";
+import { corsOptions } from "./src/utils/corsoption.utils.js";
+app.use(cors(corsOptions));
+
+
 // middleware of express parsing
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -58,4 +64,6 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Internal Server Error" });
 });
+
+
 export { app}
