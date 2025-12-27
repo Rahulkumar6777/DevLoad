@@ -7,6 +7,7 @@ import {
 import Navbar from "./components/Navbar";
 import { Home } from "./pages/Home";
 import navbarRoutes from "./components/NavbarRoutes";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   const location = useLocation();
@@ -16,11 +17,18 @@ function App() {
       {showNavbar && <Navbar />}
       <div>
         <Routes>
-          <Routes path="/" element={Home} />
+          <Route path="/" element={<Home/>} />
         </Routes>
       </div>
     </div>
   );
 }
 
-export default App;
+const AppWrapper = () => (
+  <Router>
+    <ScrollToTop/>
+    <App />
+  </Router>
+);
+
+export default AppWrapper;
