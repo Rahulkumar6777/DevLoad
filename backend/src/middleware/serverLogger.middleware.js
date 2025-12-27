@@ -1,12 +1,6 @@
-// serverLogger.js
-import * as osu from 'node-os-utils';
-import pidusage from 'pidusage';
-
-const cpu = osu.cpu;
-const mem = osu.mem;
+import pidusage from "pidusage";
 
 let requestCount = 0;
-
 
 export function requestCounter(req, res, next) {
   requestCount++;
@@ -14,21 +8,13 @@ export function requestCounter(req, res, next) {
 }
 
 
-export function startServerLogger(intervalMs = 5000) {
-  setInterval(async () => {
-    try {
-      const cpuUsage = await cpu.usage();
-      const memInfo = await mem.info();
-      const processStats = await pidusage(process.pid);
-
-      console.log('--- Server Stats ---');
-      console.log('Requests so far:', requestCount);
-      console.log('CPU Usage (%):', cpuUsage);
-      console.log('Memory Info:', memInfo);
-      console.log('Process Stats:', processStats);
-      console.log('--------------------\n');
-    } catch (err) {
-      console.error('Error logging server stats:', err);
-    }
-  }, intervalMs);
+export async function startServerLogger() {
+  try {
+    const processStats = await pidusage(process.pid);
+    console.log('Current Server Stats:' );
+    console.log('CPU (%):', processStats.cpu.toFixed(2));
+    console.log('Memory (MB):', (processStats.memory / 1024 / 1024).toFixed(2));
+  } catch (err) {
+    console.error('Stats error:', err.message);
+  }
 }
