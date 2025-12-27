@@ -79,13 +79,13 @@ app.use(compression());
 
 
 // client monitoring middleware
-import UAParser from 'ua-parser-js';
+import {UAParser} from 'ua-parser-js';
 export function monitoringMiddleware(req, res, next) {
   try {
     const parser = new UAParser(req.headers['user-agent']);
     const clientInfo = parser.getResult();
 
-    // Attach only client info
+    
     req.monitoring = {
       client: clientInfo
     };
