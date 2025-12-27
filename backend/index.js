@@ -43,4 +43,10 @@ import morgan from "morgan";
 app.use(morgan("combined"));
 
 
+// cookie parser middleware
+import cookieParser from "cookie-parser";
+app.use(cookieParser());
+
+
+
 export { app}
