@@ -94,7 +94,7 @@ userschema.methods.checkpassword = async function (oldpassword) {
 
 // generate socketToken for validate socket connection
 userschema.methods.generateSocketToken = async function (params) {
-    return await jwt.sign(
+    return jwt.sign(
         {
             _id: this._id,
         },
@@ -105,6 +105,19 @@ userschema.methods.generateSocketToken = async function (params) {
     )
 }
 
+
+// make accesstoken
+userschema.methods.generateAccessToken = async function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    process.env.ACCESS_TOKEN_SECRET,
+    {
+      expiresIn: process.env.ACCESS_TOKEN_EXPIRY,
+    }
+  );
+};
 
 
 export const User = mongoose.model("User", userschema);
