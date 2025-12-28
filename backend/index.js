@@ -8,6 +8,11 @@ import { configDotenv } from "dotenv";
 configDotenv();
 
 
+// run container befroe server start
+import { runcontainer } from "./src/scripts/index.js";
+await runcontainer()
+
+
 //database connection
 import { connectDb } from "./src/configs/db.connect.js";
 await connectDb();
