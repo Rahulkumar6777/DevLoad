@@ -1,0 +1,77 @@
+import mongoose from "mongoose";
+
+const userschema = new mongoose.Schema({
+  fullName: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    index: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  subscription: {
+    type: String,
+    default: "free",
+    enum: ["free", "member"],
+  },
+  subscriptionStart: {
+    type: Date,
+  },
+  subscriptionEnd: {
+    type: Date,
+  },
+  subscriptionId: {
+    type: String,
+    default: null,
+  },
+  storageUsed: {
+    type: Number,
+    default: 0,
+  },
+  maxStorage: {
+    type: Number,
+    default: 1024,
+    enum: [1024, 5120],
+  },
+  requestsUsed: {
+    type: Number,
+    default: 0,
+  },
+  maxRequests: {
+    type: Number,
+    default: 1500,
+    enum: [1500, 15000],
+  },
+  currentProject: {
+    type: Number,
+  },
+  totalProject: {
+    type: Number,
+    default: 1,
+    enum: [1, 5],
+  },
+  status: {
+    type: String,
+    default: "active",
+    enum: ["active", "banned"],
+  },
+  suspensionEnd: {
+    type: Date,
+  },
+  refreshtoken: {
+    type: String,
+  },
+  isUnderRenew: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+export const User = mongoose.model("User", userschema);
