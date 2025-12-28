@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'frontend/**'            
-      - '.github/workflows/**' 
+      - '.github/workflows/frontend.yml' 
 
 jobs:
   # ---- Build job ----
