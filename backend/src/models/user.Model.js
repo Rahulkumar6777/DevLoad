@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import bcrypt from 'bcrypt'
+import jwt from "jsonwebtoken";
 
 const userschema = new mongoose.Schema({
   fullName: {
@@ -88,6 +90,21 @@ userschema.methods.checkpassword = async function (oldpassword) {
   const result1 = await bcrypt.compare(oldpassword, this.password);
   return result1;
 };
+
+
+// generate socketToken for validate socket connection
+userschema.methods.generateSocketToken = async function (params) {
+    return await jwt.sign(
+        {
+            _id: this._id,
+        },
+        process.env.SOCKET_TOKEN_SECRET,
+        {
+            expiresIn: process.env.SOCKET_TOKEN_EXPIRY
+        }
+    )
+}
+
 
 
 export const User = mongoose.model("User", userschema);
