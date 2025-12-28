@@ -5,3 +5,4 @@ backend/node_modules
 backend/.env
 backend/src/infra/redis-data
 backend/src/infra/minio-data
+worker-backend/node_modules
