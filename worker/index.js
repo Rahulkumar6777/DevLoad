@@ -18,7 +18,7 @@ configDotenv();
 
 const ffmpegPath = "/usr/bin/ffmpeg";
 const outputDir = "output";
-const uploadDir = "upload";
+const uploadDir = "upload"; 
 
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
@@ -335,7 +335,7 @@ export const deleteFromMinio = async (endpoint, accessId, accessKey, key) => {
     return true;
   } catch (err) {
     console.error("Delete failed:", err.message);
-    return false;
+    throw new Error(error.message);
   }
 };
 const worker = new Worker(
