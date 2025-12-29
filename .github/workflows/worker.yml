@@ -57,7 +57,7 @@ jobs:
             docker run -d --name devload-worker \
               --restart always \
               --network vaani-net \
-              -e BUCKET_NAME= ${{ secrets.BUCKET_NAME }} \
+              -e BUCKET_NAME=${{ secrets.BUCKET_NAME }} \
               -e ENDPOINT=${{ secrets.ENDPOINT }} \
               -e ACCESS_ID=${{ secrets.ACCESS_ID }} \
               -e ACCESS_KEY=${{ secrets.ACCESS_KEY }} \
