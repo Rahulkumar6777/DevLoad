@@ -19,7 +19,6 @@ configDotenv();
 const ffmpegPath = "/usr/bin/ffmpeg";
 const outputDir = "output";
 const uploadDir = "upload";
-const ffprobePath = "/usr/bin/ffprobe";
 
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });

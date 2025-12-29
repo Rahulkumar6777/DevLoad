@@ -15,8 +15,6 @@ COPY 'package-lock.json' .
 
 RUN npm ci
 
-COPY 'output' .
-COPY 'upload' .
 COPY 'index.js' .
 COPY ./src ./src
 
