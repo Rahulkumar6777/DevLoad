@@ -55,12 +55,9 @@ jobs:
             docker rm devload-worker || true
 
             docker run -d --name devload-worker \
-              --add-host=host.docker.internal:host-gateway \
               --restart always \
               --network vaani-net \
               -e BUCKET_NAME= ${{ secrets.BUCKET_NAME }} \
-              -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
-              -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
               -e ENDPOINT=${{ secrets.ENDPOINT }} \
               -e ACCESS_ID=${{ secrets.ACCESS_ID }} \
               -e ACCESS_KEY=${{ secrets.ACCESS_KEY }} \
