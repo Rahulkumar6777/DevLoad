@@ -402,6 +402,6 @@ worker.on("completed", async (job) => {
         process.env.ENDPOINT,
         process.env.ACCESS_ID,
         process.env.ACCESS_KEY,
-        (key = `${filename}`)
+        filename
       );
  });
