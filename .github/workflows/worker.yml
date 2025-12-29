@@ -65,4 +65,4 @@ jobs:
               -e EMAIL_USER=${{ secrets.EMAIL_USER }} \
               -e EMAIL_PASS=${{ secrets.EMAIL_PASS }} \
               -e ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }} \
-              ${{ secrets.DOCKER_USERNAME }}/devload-worker:latest
+               ${{ secrets.DOCKER_USERNAME }}/devload-worker:latest
