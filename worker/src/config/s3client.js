@@ -4,6 +4,7 @@ export const s3client = (endpoint, accessId, accessKey) => {
   return new S3Client({
     endpoint: endpoint,
     region: 'auto',
+    forcePathStyle: true,
     credentials: {
       accessKeyId: accessId,
       secretAccessKey: accessKey
