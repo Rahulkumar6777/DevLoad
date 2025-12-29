@@ -5,6 +5,7 @@ backend/node_modules
 backend/.env
 backend/src/infra/redis-data
 backend/src/infra/minio-data
+backend/queue-api.js
 worker/node_modules
 worker/.env
 worker/docker-compose.yml
