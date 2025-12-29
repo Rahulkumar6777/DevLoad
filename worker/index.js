@@ -197,8 +197,7 @@ const uploadFiles = async (
   accesskey,
   userEmail,
   userFullname,
-  userEmailSendPrefrence,
-  websiteAdminEmail
+  userEmailSendPrefrence
 ) => {
   try {
     const client = s3client(endpoint, accessId, accesskey);
