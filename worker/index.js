@@ -389,8 +389,8 @@ const worker = new Worker(
 
 worker.on("completed", async (job) => {
 
-  const projectid = job.projectId
-  const filename = job.filename
+  const projectid = job.data.projectId
+  const filename = job.data.filename
 
   console.log(filename)
   const queue = new Queue("process-video-complete", { connection });
