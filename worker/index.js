@@ -296,7 +296,7 @@ const uploadFiles = async (
       throw error;
     }
   } catch (error) {
-    throw new Error(error.message);
+    throw new Error("upload error",error.message);
   }
 };
 
