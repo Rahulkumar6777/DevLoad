@@ -334,7 +334,7 @@ export const deleteFromMinio = async (endpoint, accessId, accessKey, key) => {
     return true;
   } catch (err) {
     console.error("Delete failed:", err.message);
-    throw new Error(error.message);
+    throw new Error(err.message);
   }
 };
 const worker = new Worker(
@@ -391,6 +391,8 @@ worker.on("completed", async (job) => {
 
   const projectid = job.projectId
   const filename = job.filename
+
+  console.log(filename)
   const queue = new Queue("process-video-complete", { connection });
 
       await queue.add("process-video-complete", {
