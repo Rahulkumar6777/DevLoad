@@ -55,6 +55,7 @@ jobs:
             docker rm devload-worker || true
 
             docker run -d --name devload-worker \
+              --add-host=host.docker.internal:host-gateway \
               --restart always \
               --network vaani-net \
               -e BUCKET_NAME= ${{ secrets.BUCKET_NAME }} \
