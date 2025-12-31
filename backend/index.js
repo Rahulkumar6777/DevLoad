@@ -28,7 +28,7 @@ const app = express();
 
 // cors middleware
 import cors from "cors";
-import { corsOptions } from "./src/utils/corsoption.utils.js";
+import { corsOptions } from "./src/utils/frontendCors.js";
 app.use(cors(corsOptions));
 
 

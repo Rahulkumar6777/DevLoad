@@ -12,4 +12,11 @@ const corsProdution = {
     allowedHeaders: ['Content-Type', 'Authorization']
 }
 
-export const corsOptions  = process.env.NODE_ENV === 'production' ? corsProdution : corsLocally;
+export const corsPublic = {
+    origin: '*',
+    methods: ['GET'],
+    credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization' , 'x-api-key'],
+}
+
+export const corsFrontend  = process.env.NODE_ENV === 'production' ? corsProdution : corsLocally;
