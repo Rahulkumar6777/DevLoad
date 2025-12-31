@@ -74,8 +74,8 @@ export const verifyRegister = async (req, res) => {
         const queue = makeQueue("WelcomeMessage")
 
         const queuedata = {
-            fullname: fullname,
-            email: email
+            fullname: newUser.fullName,
+            email: newUser.email
         }
         await queue.add("WelcomeMessage", { data: queuedata })
 
@@ -83,6 +83,7 @@ export const verifyRegister = async (req, res) => {
             message: "User register Success",
         })
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             error: "Internal Server Error"
         })

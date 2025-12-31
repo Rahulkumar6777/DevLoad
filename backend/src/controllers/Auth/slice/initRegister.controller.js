@@ -3,6 +3,7 @@ import { OtpValidate } from "../../../models/otpValidator.model.js"
 import { DeleteUserAccountModel } from "../../../Models/DeleteUserAccount.model.js";
 import { transporter } from "../../../utils/emailTransporter.js";
 import { TempUser } from "../../../models/tempUser.model.js";
+import { User } from "../../../models/user.Model.js";
 
 const SignupValidate = [
     body('fullname').notEmpty().withMessage("Fullname is Required").isString(),
@@ -39,7 +40,7 @@ const initRegistration = async (req, res) => {
         const { fullname, email, password } = req.body;
 
         const checkexistTempUser = await TempUser.findOne({ email })
-        if (!checkexistTempUser) {
+        if (checkexistTempUser) {
             return res.status(409).json({
                 message: "user already exist! please validate otp and create account"
             })
