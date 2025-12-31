@@ -53,6 +53,7 @@ const userschema = new mongoose.Schema({
   },
   currentProject: {
     type: Number,
+    default: 1
   },
   totalProject: {
     type: Number,

@@ -4,10 +4,11 @@ import cron from 'node-cron'
 const projectschema = new mongoose.Schema({
   projectname: {
     type: String,
-    required: true,
+    default: "New Project"
   },
   description: {
-    type: String
+    type: String,
+    default: "default Project"
   },
   userid: {
     type: mongoose.Schema.Types.ObjectId,
