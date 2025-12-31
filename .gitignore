@@ -9,3 +9,7 @@ backend/queue-api.js
 worker/node_modules
 worker/.env
 worker/docker-compose.yml
+app-frontend/node_modules
+app-frontend/.env
+app-frontend/dist
+app-frontend/README.md

@@ -5,7 +5,6 @@ import { OtpValidate } from "../../../models/otpValidator.model";
 import * as crypto from "crypto"
 import { Project } from "../../../models/projects.model.js";
 import { Apikey } from "../../../models/apikey.model.js";
-import { Queue } from "bullmq";
 import { makeQueue } from "../../../utils/makeQueue.js";
 
 const validateVerifyregister = [
