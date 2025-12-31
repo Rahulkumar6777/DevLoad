@@ -1,7 +1,7 @@
 import { body, validationResult } from "express-validator"
 import { TempUser } from "../../../models/tempUser.model.js";
 import { User } from "../../../models/user.Model.js";
-import { OtpValidate } from "../../../models/otpValidator.model";
+import { OtpValidate } from "../../../models/otpValidator.model.js";
 import * as crypto from "crypto"
 import { Project } from "../../../models/projects.model.js";
 import { Apikey } from "../../../models/apikey.model.js";

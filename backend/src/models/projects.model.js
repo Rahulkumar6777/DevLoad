@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import cron from 'node-cron'
 
 const projectschema = new mongoose.Schema({
   projectname: {
@@ -70,50 +69,3 @@ const projectschema = new mongoose.Schema({
 const Project = mongoose.model('Project', projectschema);
 
 export { Project };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-async function resetRequestsUsed() {
-  try {
-    await User.updateMany({}, { requestsUsed: 0 });
-    console.log("requestsUsed field reset to 0 for all users");
-  } catch (error) {
-    console.error("Error resetting requestsUsed field:", error);
-  }
-}
-
-cron.schedule("0 0 1 * *", resetRequestsUsed);

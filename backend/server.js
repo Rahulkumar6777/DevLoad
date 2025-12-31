@@ -11,7 +11,7 @@ import packageRoutes from './src/routes/package.routes.js'
 
 
 // routes here
-app.use('/' ,cors(corsPublic) , publicUrlRoutes )
+app.use('/public' ,cors(corsPublic) , publicUrlRoutes )
 app.use('/api/v2/user' , cors(corsFrontend) , userRoutes)
 app.use('/api/v2/devload' , cors(packageCors) , packageRoutes)
 
