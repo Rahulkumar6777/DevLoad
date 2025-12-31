@@ -83,25 +83,6 @@ import { requestCounter, startServerLogger } from "./src/middleware/serverLogger
 app.use(requestCounter);
 
 
-// client monitoring middleware
-import {UAParser} from 'ua-parser-js';
-export function monitoringMiddleware(req, res, next) {
-  try {
-    const parser = new UAParser(req.headers['user-agent']);
-    const clientInfo = parser.getResult();
-
-    
-    req.monitoring = {
-      client: clientInfo
-    };
-
-    next();
-  } catch (err) {
-    next(err);
-  }
-}
-
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

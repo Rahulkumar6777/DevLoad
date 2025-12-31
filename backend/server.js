@@ -1,8 +1,8 @@
-import { app ,server } from "./index.js"; 
+import { app , server } from "./index.js";
 import cors from 'cors'
 import { corsFrontend , corsPublic } from "./src/utils/frontendCors.js";
 import { packageCors } from "./src/utils/packageCors.js";
-
+import { monitoringMiddleware } from "./src/middleware/monitering.middleware.js";
 
 // here i import the router paths
 import userRoutes from './src/routes/user.routes.js'
@@ -10,9 +10,10 @@ import publicUrlRoutes from './src/routes/publicUrl.routes.js'
 import packageRoutes from './src/routes/package.routes.js'
 
 
+
 // routes here
-app.use('/public' ,cors(corsPublic) , publicUrlRoutes )
-app.use('/api/v2/user' , cors(corsFrontend) , userRoutes)
+app.use('/public' ,cors(corsPublic), publicUrlRoutes )
+app.use('/api/v2/user' , cors(corsFrontend) , monitoringMiddleware  , userRoutes)
 app.use('/api/v2/devload' , cors(packageCors) , packageRoutes)
 
 
