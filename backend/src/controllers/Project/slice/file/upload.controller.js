@@ -154,7 +154,7 @@ export const uplaodFile = async (req, res) => {
             },
             {
                 $inc: {
-                    storageUsed: filesizeinmb,
+                    storageUsed: filesizeinmb.toFixed(2),
                     requestsUsed: 1,
                 },
             }
@@ -169,7 +169,7 @@ export const uplaodFile = async (req, res) => {
                 $inc: {
                     totalUploads: 1,
                     requestsUsed: 1,
-                    storageUsed: filesizeinmb,
+                    storageUsed: filesizeinmb.toFixed(2),
                 },
             }
         );
