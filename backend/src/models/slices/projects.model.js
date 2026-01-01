@@ -40,7 +40,7 @@ const projectschema = new mongoose.Schema({
   },
   fileTypeAllowed: {
     type: [String],
-    enum: ['image', 'video', 'audio' ,'document'],
+    enum: ['image', 'video', 'audio', 'document'],
     default: ['image', 'audio']
   },
   maxapikey: {
@@ -58,7 +58,7 @@ const projectschema = new mongoose.Schema({
   isActive: {
     type: String,
     default: 'active',
-    enum: ['active' , 'softdelete' , 'frozen'  ]
+    enum: ['active', 'softdelete', 'frozen']
   },
   deleteatedAt: {
     type: Date,
@@ -66,7 +66,12 @@ const projectschema = new mongoose.Schema({
   emailSendPreference: {
     type: Boolean,
     default: true
+  },
+  savedStorage: {
+    type: Number,
+    default: 0,
   }
+
 },
   { timestamps: true });
 

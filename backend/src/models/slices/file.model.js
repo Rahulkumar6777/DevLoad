@@ -39,5 +39,10 @@ const fileschema = new mongoose.Schema({
         enum: ['active'],
         default: 'active'
     },
+    serveFrom: {
+        type: String,
+        default: "main",
+        enum: ["main", "temp"]
+    }
 }, { timestamps: true })
 export const File = mongoose.model("File", fileschema)
