@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
         return cb(new Error("Request Quota reached"))
       }
 
-      const projectexist = await Model.Project.findOne({ projectid: projectid, userid: result._id, isActive: 'active' });
+      const projectexist = await Model.Project.findOne({ _id: projectid, userid: user._id, isActive: 'active' });
       if (!projectexist) {
         return cb(new Error("invalid Project Id or frozen project"), false)
       }

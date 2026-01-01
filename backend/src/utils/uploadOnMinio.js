@@ -1,3 +1,4 @@
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3client } from "../configs/s3client.js";
 import fs from 'fs'
 
@@ -11,6 +12,7 @@ export const uploadFilesOnMinio = async (
     try {
         const client = s3client(process.env.ENDPOINT, process.env.ACCESS_ID, process.env.ACCESS_KEY);
 
+        console.log(projectId , filename , filepath , contentType)
         const uploadOnMinio = new PutObjectCommand({
             Bucket: process.env.BUCKET_NAME,
             Key: `${projectId}/${filename}`,
@@ -22,9 +24,11 @@ export const uploadFilesOnMinio = async (
             await client.send(uploadOnMinio);
 
         } catch (error) {
-            throw new Error('failed to uplaod on minio' , error.message);
+            console.log(error)
+            throw new Error(`failed to upload on minio: ${error.message}`);
         }
     } catch (error) {
-        throw new Error("upload error", error.message);
+        console.log(error)
+        throw new Error("upload error", error);
     }
 };
