@@ -2,6 +2,8 @@ import express from "express"
 import { Auth } from "../controllers/Auth/index.js";
 import { verifyJWT } from "../middleware/Auth.js";
 import { Project } from '../controllers/Project/index.js'
+import { upload } from "../middleware/multerForFrontend.middleware.js";
+import { virusScanning } from "../middleware/viruScanning.middleware.js";
 
 const router = express.Router();
 
@@ -13,10 +15,21 @@ router.post('/auth/login', Auth.Login)
 
 
 // project route
-router.route(
-    '/project'
+router.route('/project').post(verifyJWT, Project.core.createProject).delete(verifyJWT, Project.core.deleteProject)
+router.route('/project/:projectId/upload').post(verifyJWT,
+    (req, res, next) => {
+        upload.single("file")(req, res, function (err) {
+            if (err) {
+                console.error("Upload error:", err);
+                return res.status(err.statusCode || 400).json({
+                    message: err.message || "Upload failed",
+                });
+            }
+            next();
+        });
+    },
+    virusScanning,
+    Project.file.uplaodFile
 )
-.post(verifyJWT, Project.core.createProject)
-.delete(verifyJWT , Project.core.deleteProject)
 
 export default router
