@@ -1,7 +1,6 @@
 import { body } from "express-validator"
 import * as crypto from 'crypto'
-import { Project } from "../../../../models/projects.model.js"
-import { Apikey } from "../../../../models/apikey.model.js"
+import { Model } from "../../../../models/index.js"
 
 const CreateProjectValidate = [
     body('projectname')
@@ -43,7 +42,7 @@ export const createProject = async (req, res) => {
         const maxapikey = user.subscription === 'free' ? 1 : 5;
         const isOptimise = user.subscription === 'free' ? false : true
 
-        const newProject = new Project({
+        const newProject = new Model.Project({
             projectname: projectname,
             description: description,
             userid: userId,
@@ -52,7 +51,7 @@ export const createProject = async (req, res) => {
             fileTypeAllowed: fileTypeAllowed,
             isOptimise: isOptimise
         })
-        const newApiKey = new Apikey({
+        const newApiKey = new Model.Apikey({
             userid: userId,
             projectid: newProject._id,
             key: apiKey

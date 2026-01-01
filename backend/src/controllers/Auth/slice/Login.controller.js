@@ -1,11 +1,9 @@
 import { body, validationResult } from "express-validator";
-import { User } from "../../../models/user.Model.js";
 import { GenerateAccessTokenAndRefreshToken } from '../../../Utils/GenerateAccessTokenAndRefreshToken.js';
-import { Queue } from 'bullmq';
 import { connection } from "../../../utils/connection.js";
 import { AccesstokenOption, RefreshtokenOption } from "../../../Utils/option.js";
 import { makeQueue } from "../../../utils/makeQueue.js";
-
+import { Model } from "../../../models/index.js";
 
 const LoginValidate = [
     body('email')
@@ -38,7 +36,7 @@ const Login = async (req, res) => {
         }
 
         const result = req.monitoring.client
-        const user = await User.findOne({ email: email });
+        const user = await Model.User.findOne({ email: email });
         if (!user) {
             return res.status(400).json({
                 message: "Account not Exist with this Email"

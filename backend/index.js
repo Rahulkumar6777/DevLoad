@@ -10,8 +10,8 @@ configDotenv();
 
 
 // run container befroe server start
-import { runcontainer } from "./src/scripts/index.js";
-await runcontainer()
+// import { runcontainer } from "./src/scripts/index.js";
+// await runcontainer()
 
 
 //database connection
@@ -79,7 +79,7 @@ app.use(compression());
 
 
 //// Middleware to count requests
-import { requestCounter, startServerLogger } from "./src/middleware/serverLogger.middleware.js";
+import { requestCounter } from "./src/middleware/serverLogger.middleware.js";
 app.use(requestCounter);
 
 

@@ -1,9 +1,6 @@
 import { body, validationResult } from "express-validator";
-import { OtpValidate } from "../../../models/otpValidator.model.js"
-import { DeleteUserAccountModel } from "../../../Models/DeleteUserAccount.model.js";
+import { Model } from "../../../models/index.js";
 import { transporter } from "../../../utils/emailTransporter.js";
-import { TempUser } from "../../../models/tempUser.model.js";
-import { User } from "../../../models/user.Model.js";
 
 const SignupValidate = [
     body('fullname').notEmpty().withMessage("Fullname is Required").isString(),
@@ -39,14 +36,14 @@ const initRegistration = async (req, res) => {
 
         const { fullname, email, password } = req.body;
 
-        const checkexistTempUser = await TempUser.findOne({ email })
+        const checkexistTempUser = await Model.TempUser.findOne({ email })
         if (checkexistTempUser) {
             return res.status(409).json({
                 message: "user already exist! please validate otp and create account"
             })
         }
 
-        const checkDeletedUSer = await DeleteUserAccountModel.findOne({ email: email });
+        const checkDeletedUSer = await Model.DeleteUserAccountModel.findOne({ email: email });
         if (checkDeletedUSer) {
             return res.status(423).json({
                 message: "Account Deleted with this email, you can't create a new account for 30 days after deletion",
@@ -54,7 +51,7 @@ const initRegistration = async (req, res) => {
         }
 
 
-        const checkemail = await User.findOne({ email });
+        const checkemail = await Model.User.findOne({ email });
         if (checkemail) {
             return res.status(409).json({
                 message: "Account Already Exist with this email",
@@ -186,7 +183,7 @@ const initRegistration = async (req, res) => {
 
         await sendRegistrationCode(email);
 
-        const newTempUser = new TempUser({ fullname: fullname, email: email, password: password })
+        const newTempUser = new Model.TempUser({ fullname: fullname, email: email, password: password })
         await newTempUser.save();
 
         res.status(200).json({

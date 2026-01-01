@@ -1,10 +1,6 @@
 import { body, validationResult } from "express-validator"
-import { TempUser } from "../../../models/tempUser.model.js";
-import { User } from "../../../models/user.Model.js";
-import { OtpValidate } from "../../../models/otpValidator.model.js";
 import * as crypto from "crypto"
-import { Project } from "../../../models/projects.model.js";
-import { Apikey } from "../../../models/apikey.model.js";
+import { Model } from "../../../models/index.js";
 import { makeQueue } from "../../../utils/makeQueue.js";
 
 const validateVerifyregister = [
@@ -36,14 +32,14 @@ export const verifyRegister = async (req, res) => {
 
         const { email, otp } = req.body;
 
-        const findAndValidateInTempuser = await TempUser.findOne({ email })
+        const findAndValidateInTempuser = await Model.TempUser.findOne({ email })
         if (!findAndValidateInTempuser) {
             return res.status(404).json({
                 message: "you not init register!"
             })
         }
 
-        const user = await OtpValidate.findOneAndDelete({ email: email, code: otp })
+        const user = await Model.OtpValidate.findOneAndDelete({ email: email, code: otp })
         if (!user) {
             return res.status(400).json({
                 message: "Invalid Otp Or Expired"
@@ -53,17 +49,17 @@ export const verifyRegister = async (req, res) => {
         const apiKey = crypto.randomBytes(16).toString('hex')
 
         // create new user
-        const newUser = new User({
+        const newUser = new Model.User({
             fullName: findAndValidateInTempuser.fullname,
             email: findAndValidateInTempuser.email,
             password: findAndValidateInTempuser.password,
         })
 
         // create default project
-        const newProject = new Project({ userid: newUser._id })
+        const newProject = new Model.Project({ userid: newUser._id })
 
         // create default apiKey for defaultproject
-        const newApiKey = new Apikey({ userid: newUser._id, projectid: newProject._id, key: apiKey })
+        const newApiKey = new Model.Apikey({ userid: newUser._id, projectid: newProject._id, key: apiKey })
 
         // save all
         await newUser.save();
