@@ -18,7 +18,7 @@ configDotenv();
 
 const ffmpegPath = "/usr/bin/ffmpeg";
 const outputDir = "output";
-const uploadDir = "upload"; 
+const uploadDir = "upload";
 
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir, { recursive: true });
@@ -27,38 +27,35 @@ const filename = Math.random().toString(36).substring(2, 15);
 let inputFile = `${uploadDir}/${filename}`;
 
 const downloadVideo = async (
-  bucketName,
-  objectKey,
-  endpoint,
-  accessId,
-  accessKey
+  url
 ) => {
   try {
-    const client = s3client(endpoint, accessId, accessKey);
 
-    const extension = path.extname(objectKey).toLowerCase();
-    inputFile = `${uploadDir}/${filename}${extension}`;
+    const parsed = new URL(url);
+    const ext = path.extname(parsed.pathname) || ".mp4";
 
-    const command = new GetObjectCommand({
-      Bucket: bucketName,
-      Key: objectKey,
+    inputFile = path.join(uploadDir, `${filename}${ext}`);
+
+    const response = await axios({
+      method: "GET",
+      url,
+      responseType: "stream",
     });
-
-    const response = await client.send(command);
 
     const writer = fs.createWriteStream(inputFile);
 
     await new Promise((resolve, reject) => {
-      response.Body.pipe(writer);
-      response.Body.on("error", reject);
+      response.data.pipe(writer);
+      response.data.on("error", reject);
       writer.on("finish", resolve);
+      writer.on("error", reject);
     });
 
-    console.log(" Video downloaded successfully");
+    console.log("Video downloaded successfully:", inputFile);
     return inputFile;
   } catch (err) {
-    console.error(" Error downloading video:", err.message);
-    throw new Error("Download failed", err.message);
+    console.error(" Error downloading video:", `${err.message}`);
+    throw new Error("Download failed", `${err.message}`);
   }
 };
 
@@ -123,14 +120,14 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendEmailToAdminOnFail = async (
-        filename,
-        reason
-      ) => {
-        const mailOptions = {
-          from: `"DevLoad" <${process.env.EMAIL_USER}>`,
-          to: process.env.ADMIN_EMAIL,
-          subject: "❌ DevLoad — File Optimisation Failed",
-          html: `
+  filename,
+  reason
+) => {
+  const mailOptions = {
+    from: `"DevLoad" <${process.env.EMAIL_USER}>`,
+    to: process.env.ADMIN_EMAIL,
+    subject: "❌ DevLoad — File Optimisation Failed",
+    html: `
 <!DOCTYPE html>
 <html>
 <body style="margin:0;background:#0b1220;font-family:Arial,Helvetica,sans-serif;">
@@ -184,10 +181,10 @@ Powered by DevLoad • Monitoring • Stability • Control
 </body>
 </html>
 `,
-        };
+  };
 
-        await transporter.sendMail(mailOptions);
-      }
+  await transporter.sendMail(mailOptions);
+}
 
 const uploadFiles = async (
   projectId,
@@ -197,7 +194,7 @@ const uploadFiles = async (
   accesskey,
   userEmail,
   userFullname,
-  userEmailSendPrefrence
+  userEmailSendPreference
 ) => {
   try {
     const client = s3client(endpoint, accessId, accesskey);
@@ -289,14 +286,15 @@ const uploadFiles = async (
         await transporter.sendMail(mailOptions);
       };
 
-      if (userEmailSendPrefrence) {
+      if (userEmailSendPreference) {
+        console.log("send optimised email to user ")
         await sendEmailToUser(userEmail);
       }
     } catch (error) {
       throw error;
     }
   } catch (error) {
-    throw new Error("upload error",error.message);
+    throw new Error("upload error", error.message);
   }
 };
 
@@ -344,19 +342,15 @@ const worker = new Worker(
       projectId,
       filename,
       userFullname,
-      useEmailSendPreference,
+      userEmailSendPreference,
       userEmail,
-      websiteAdminEmail,
+      url
     } = job.data;
 
     try {
-      await downloadVideo(
-        "temp",
-        filename,
-        process.env.ENDPOINT,
-        process.env.ACCESS_ID,
-        process.env.ACCESS_KEY
-      );
+
+      console.log(userEmailSendPreference)
+      await downloadVideo(url);
 
       await convertToOptimizedMP4(inputFile, outputDir);
 
@@ -368,23 +362,23 @@ const worker = new Worker(
         process.env.ACCESS_KEY,
         userEmail,
         userFullname,
-        useEmailSendPreference,
-        websiteAdminEmail
+        userEmailSendPreference,
       );
 
       console.log("Job Done");
     } catch (err) {
       console.log('start sending mail')
-      await sendEmailToAdminOnFail(filename,err.message);
+      await sendEmailToAdminOnFail(filename, err.message);
       console.error("Process Failed:", err);
       throw err;
     } finally {
       await cleanupFiles();
     }
   },
-  { connection,
+  {
+    connection,
     concurrency: 1
-   }
+  }
 );
 
 worker.on("completed", async (job) => {
@@ -395,15 +389,15 @@ worker.on("completed", async (job) => {
   console.log(filename)
   const queue = new Queue("process-video-complete", { connection });
 
-      await queue.add("process-video-complete", {
-        projectId: projectid,
-        filename,
-      });
+  await queue.add("process-video-complete", {
+    projectId: projectid,
+    filename,
+  });
 
-      await deleteFromMinio(
-        process.env.ENDPOINT,
-        process.env.ACCESS_ID,
-        process.env.ACCESS_KEY,
-        filename
-      );
- });
+  await deleteFromMinio(
+    process.env.ENDPOINT,
+    process.env.ACCESS_ID,
+    process.env.ACCESS_KEY,
+    `${projectid}/${filename}`
+  );
+});
