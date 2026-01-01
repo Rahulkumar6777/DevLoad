@@ -65,7 +65,7 @@ const initRegistration = async (req, res) => {
             try {
                 const code = generateCode();
 
-                await OtpValidate.findOneAndUpdate(
+                await Model.OtpValidate.findOneAndUpdate(
                     { email },
                     { code, createdAt: new Date() },
                     { upsert: true, new: true }

@@ -2,7 +2,7 @@ import { Model} from '../models/index.js'
 
 const GenerateAccessTokenAndRefreshToken = async function (id) {
     try {
-        const user = await User.findById(id);
+        const user = await Model.User.findById(id);
         if (!user) throw new Error("User not found");
 
         

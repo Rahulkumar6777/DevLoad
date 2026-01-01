@@ -1,4 +1,4 @@
-import { body } from "express-validator"
+import { body, validationResult } from "express-validator"
 import * as crypto from 'crypto'
 import { Model } from "../../../../models/index.js"
 
@@ -23,10 +23,9 @@ export const createProject = async (req, res) => {
         }
 
         const user = req.user;
-
         if (user.currentProject >= user.totalProject) {
             return res.status(400).json({
-                message: `You not create more than ${user.totalproject} projects`
+                message: `You not create more than ${user.totalProject} projects`
             })
         }
 
