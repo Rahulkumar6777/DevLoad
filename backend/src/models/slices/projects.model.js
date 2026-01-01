@@ -62,6 +62,10 @@ const projectschema = new mongoose.Schema({
   },
   deleteatedAt: {
     type: Date,
+  },
+  emailSendPreference: {
+    type: Boolean,
+    default: true
   }
 },
   { timestamps: true });

@@ -1,22 +1,20 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3client } from "../configs/s3client.js";
-import fs from 'fs'
 
 
 export const uploadFilesOnMinio = async (
     projectId,
     filename,
     filepath,
-    contentType
+    contentType,
+    bucketName
 ) => {
     try {
         const client = s3client(process.env.ENDPOINT, process.env.ACCESS_ID, process.env.ACCESS_KEY);
-
-        console.log(projectId , filename , filepath , contentType)
         const uploadOnMinio = new PutObjectCommand({
-            Bucket: process.env.BUCKET_NAME,
+            Bucket: bucketName,
             Key: `${projectId}/${filename}`,
-            Body: fs.createReadStream(filepath),
+            Body: filepath,
             ContentType: contentType,
         });
 

@@ -1,5 +1,5 @@
 import { exec } from "child_process";
-
+import fs from 'fs'
 
 const productionscanFile = (req, res, next) => {
     if (!req.file) {
