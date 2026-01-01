@@ -91,11 +91,16 @@ app.use((err, req, res, next) => {
 
 
 //// Start background logger
-const interval = process.env.NODE_ENV === "production" ? 7200000 : 300000;
+const interval = 300000;
+const logger = process.env.NODE_ENV === "production" 
+  ? startServerLogger(interval) 
+  : null;
 
-setInterval(() => {
-  startServerLogger(interval);
-}, interval);
+if (logger) {
+  setInterval(() => {
+    logger();
+  }, interval);
+}
 
 
 export { app , server , io}
