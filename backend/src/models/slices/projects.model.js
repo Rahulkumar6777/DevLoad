@@ -58,7 +58,7 @@ const projectschema = new mongoose.Schema({
   isActive: {
     type: String,
     default: 'active',
-    enum: ['active' , 'deactivate' , 'frozen'  ]
+    enum: ['active' , 'softdelete' , 'frozen'  ]
   },
   deleteatedAt: {
     type: Date,

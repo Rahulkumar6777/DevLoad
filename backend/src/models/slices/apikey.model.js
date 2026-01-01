@@ -20,7 +20,7 @@ const apikeyschema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active', 'revoked'],
+        enum: ['active', 'softdelete'],
         default: 'active',
     },
 }, {
