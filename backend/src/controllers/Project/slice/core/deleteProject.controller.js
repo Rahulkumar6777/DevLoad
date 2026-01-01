@@ -1,5 +1,5 @@
 import { Model } from "../../../../models/index.js"
-import { makeQueue } from "../../../../utils/makeQueue";
+import { makeQueue } from "../../../../utils/makeQueue.js";
 
 
 const projectDeleteQueue = makeQueue('projectDeleteQueue');

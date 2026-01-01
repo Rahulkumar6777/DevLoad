@@ -17,5 +17,6 @@ router.route(
     '/project'
 )
 .post(verifyJWT, Project.core.createProject)
+.delete(verifyJWT , Project.core.deleteProject)
 
 export default router
