@@ -3,6 +3,8 @@ import { makeQueue } from "../../../../utils/makeQueue.js";
 import { Model } from "../../../../models/index.js";
 import fs from "fs";
 import sharp from "sharp";
+import { generateSignedUrl } from "../../../../utils/getSignedUrl.js";
+
 
 export const uplaodFile = async (req, res) => {
     try {
@@ -16,7 +18,7 @@ export const uplaodFile = async (req, res) => {
         const isImage = req.file.mimetype.startsWith("image/");
         const isVideo = req.file.mimetype.startsWith("video/");
 
-       
+
         if (isImage) {
             const originalBuffer = await fs.promises.readFile(req.file.path);
             finalBuffer = await sharp(originalBuffer)
@@ -40,7 +42,7 @@ export const uplaodFile = async (req, res) => {
             finalBuffer = fs.readFileSync(req.file.path);
         }
 
-        
+
         const filesizeinmb = Number(
             (finalBuffer.length / (1024 * 1024)).toFixed(2)
         );
@@ -54,7 +56,7 @@ export const uplaodFile = async (req, res) => {
                         ? "audio"
                         : "document";
 
-        
+
         const isAllowed = await Model.Project.findOne({
             userid: user._id,
             _id: project._id,
@@ -63,43 +65,67 @@ export const uplaodFile = async (req, res) => {
             },
         });
 
+        const isAlloweds = await Model.User.findOne({
+            _id: user._id,
+            storageUsed: {
+                $lte: user.maxStorage - filesizeinmb,
+            },
+        });
+
+        if (!isAlloweds) {
+            fs.unlinkSync(req.file.path);
+            return res.status(400).json({
+                message:
+                    "your storage quota exceeded",
+            });
+        }
+
         if (!isAllowed) {
             fs.unlinkSync(req.file.path);
             return res.status(400).json({
                 message:
-                    "your project storage quota exceeded or file too large",
+                    "your project storage quota exceeded",
             });
         }
 
-        
+
         if (isVideo) {
             if (project.isOptimise && user.subscription === "member") {
                 const videoProcessingQueue = makeQueue(
                     "devload-video-processing"
                 );
 
+                await uploadFilesOnMinio(
+                    project._id.toString(),
+                    uploadFilename,
+                    finalBuffer,
+                    contentType,
+                    process.env.TEMP_BUCKET
+                );
+
+                const url = await generateSignedUrl(
+                    process.env.TEMP_BUCKET,
+                    `${project._id}/${uploadFilename}`,
+                    process.env.ENDPOINT,
+                    process.env.ACCESS_ID,
+                    process.env.ACCESS_KEY
+                );
+
+
                 await videoProcessingQueue.add(
                     "devload-video-processing",
                     {
+                        url,
                         projectId: project._id,
                         filename: uploadFilename,
                         userFullname: user.fullName,
                         userEmail: user.email,
-                        emailPref: user.emailSendPreference,
+                        userEmailSendPreference: project.emailSendPreference,
                     }
                 );
             }
-
-            
-            await uploadFilesOnMinio(
-                project._id.toString(),
-                uploadFilename,
-                finalBuffer,
-                contentType,
-                process.env.TEMP_BUCKET
-            );
         } else {
-            
+
             await uploadFilesOnMinio(
                 project._id.toString(),
                 uploadFilename,
