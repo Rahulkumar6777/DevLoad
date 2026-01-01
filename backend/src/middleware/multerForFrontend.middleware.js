@@ -2,7 +2,6 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-import { exec } from "child_process";
 import * as crypto from "crypto";
 import { Model } from '../models/index.js'
 
@@ -50,7 +49,7 @@ const storage = multer.diskStorage({
     }
   },
   filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${crypto.randomBytes(8).toString("hex")}${path.extname(file.originalname)}`;
+    const uniqueName = `${Date.now()}${crypto.randomBytes(12).toString("hex")}${path.extname(file.originalname)}`;
     cb(null, uniqueName);
   },
 });
