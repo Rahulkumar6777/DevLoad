@@ -50,7 +50,7 @@ export const deleteFile = async (req, res) => {
             }
         );
 
-        await deleteFromMinio(`${projectId}/${filename}`, process.env.MAIN_BUCKET);
+        await deleteFromMinio(`${project}/${filename}`, process.env.MAIN_BUCKET);
 
         await Model.File.deleteOne({ filename });
 
@@ -60,6 +60,7 @@ export const deleteFile = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             error: "Internal Server Error"
         })
