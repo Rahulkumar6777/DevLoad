@@ -10,11 +10,11 @@ export const uplaodFile = async (req, res) => {
     try {
         const project = req.project;
         const user = req.user;
-        console.log(req.file)
         let finalBuffer;
         let uploadFilename = req.file.filename;
         let contentType = req.file.mimetype;
         let serveFrom;
+        let underProcessing = false
         const isImage = req.file.mimetype.startsWith("image/");
         const isVideo = req.file.mimetype.startsWith("video/");
 
@@ -106,6 +106,7 @@ export const uplaodFile = async (req, res) => {
 
 
                 serveFrom = "temp"
+                underProcessing= true
 
                 await videoProcessingQueue.add(
                     "devload-video-processing",
@@ -167,7 +168,8 @@ export const uplaodFile = async (req, res) => {
             deleteUrl,
             projectid: project._id,
             owner: user._id,
-            serveFrom
+            serveFrom,
+            underProcessing
         });
 
         await Model.User.updateOne(

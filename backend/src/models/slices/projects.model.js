@@ -34,6 +34,10 @@ const projectschema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  totaloptimisedfile: {
+    type: Number,
+    default: 0
+  },
   trafficused: {
     type: Number,
     default: 0
@@ -70,6 +74,10 @@ const projectschema = new mongoose.Schema({
   savedStorage: {
     type: Number,
     default: 0,
+  },
+  totalrawstorageofoptimisedfile: {
+    type: Number,
+    default: 0
   }
 
 },

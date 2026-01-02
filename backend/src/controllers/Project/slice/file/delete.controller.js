@@ -1,5 +1,6 @@
 import { Model } from "../../../../models/index.js"
 import { deleteFromMinio } from "../../../../utils/deleteFileFromMinio.js";
+import { makeQueue } from "../../../../utils/makeQueue.js";
 
 
 export const deleteFile = async (req, res) => {
@@ -21,6 +22,25 @@ export const deleteFile = async (req, res) => {
             return res.status(400).json({
                 message: "invalid Request"
             })
+        }
+
+        if (file.underProcessing === true) {
+            const filedeleteQueue = new makeQueue('temp-video-delete', { connection })
+            const tempCleanupAt = process.env.NODE_ENV === "production" ? Date.now() + 60 * 60 * 1000 : Date.now() + 6 * 60 * 1000
+
+            await filedeleteQueue.add(
+                "temp-video-delete",
+                {
+                    projectId: project,
+                    filename,
+                    bucket: "main"
+                },
+                {
+                    delay: tempCleanupAt - Date.now(),
+                    removeOnComplete: true,
+                    removeOnFail: false,
+                }
+            );
         }
 
         const size = file.size;

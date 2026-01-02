@@ -43,6 +43,12 @@ const fileschema = new mongoose.Schema({
         type: String,
         default: "main",
         enum: ["main", "temp"]
+    },
+    underProcessing: {
+        type: Boolean
     }
 }, { timestamps: true })
+
+
+fileschema.index({ filename: 1 });
 export const File = mongoose.model("File", fileschema)

@@ -44,6 +44,7 @@ const worker = new Worker("process-video-complete", async (job) => {
 
     file.serveFrom = 'main'
     file.size = optmisedVideoSize;
+    file.underProcessing = false
     await file.save({ validateBeforeSave: false })
 
 }, {

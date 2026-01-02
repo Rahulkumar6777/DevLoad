@@ -51,7 +51,7 @@ const PublicUrl = async (req, res) => {
 
             res.status(206);
 
-            // 🔥 REQUIRED HEADERS FOR VIDEO SEEK
+            //  REQUIRED HEADERS FOR VIDEO SEEK
             if (response.ContentRange) {
                 res.setHeader("Content-Range", response.ContentRange);
             }
