@@ -318,23 +318,7 @@ const cleanupFiles = async () => {
   }
 };
 
-export const deleteFromMinio = async (endpoint, accessId, accessKey, key) => {
-  try {
-    const client = s3client(endpoint, accessId, accessKey);
 
-    const cmd = new DeleteObjectCommand({
-      Bucket: "temp",
-      Key: key,
-    });
-
-    await client.send(cmd);
-    console.log("Deleted successfully:", key);
-    return true;
-  } catch (err) {
-    console.error("Delete failed:", err.message);
-    throw new Error(err.message);
-  }
-};
 const worker = new Worker(
   "devload-video-processing",
   async (job) => {
@@ -385,19 +369,27 @@ worker.on("completed", async (job) => {
 
   const projectid = job.data.projectId
   const filename = job.data.filename
-
-  console.log(filename)
   const queue = new Queue("process-video-complete", { connection });
 
+  const filedeleteQueue = new Queue('temp-video-delete', { connection })
+  const tempCleanupAt = Date.now() + 6 * 60 * 1000
+
+  await filedeleteQueue.add(
+    "temp-video-delete",
+    {
+      projectId: projectid,
+      filename,
+    },
+    {
+      delay: tempCleanupAt - Date.now(),
+      removeOnComplete: true,
+      removeOnFail: false,
+    }
+  );
   await queue.add("process-video-complete", {
     projectId: projectid,
     filename,
   });
 
-  await deleteFromMinio(
-    process.env.ENDPOINT,
-    process.env.ACCESS_ID,
-    process.env.ACCESS_KEY,
-    `${projectid}/${filename}`
-  );
+  console.log("all complete for ", job.id)
 });
