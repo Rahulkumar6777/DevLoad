@@ -10,11 +10,11 @@ export const uplaodFile = async (req, res) => {
     try {
         const project = req.project;
         const user = req.user;
-
+        console.log(req.file)
         let finalBuffer;
         let uploadFilename = req.file.filename;
         let contentType = req.file.mimetype;
-
+        let serveFrom;
         const isImage = req.file.mimetype.startsWith("image/");
         const isVideo = req.file.mimetype.startsWith("video/");
 
@@ -112,12 +112,14 @@ export const uplaodFile = async (req, res) => {
                 );
 
 
+                serveFrom = "temp"
+
                 await videoProcessingQueue.add(
                     "devload-video-processing",
                     {
                         url,
                         projectId: project._id,
-                        filename: uploadFilename,
+                        filename: req.file.filename,
                         userFullname: user.fullName,
                         userEmail: user.email,
                         userEmailSendPreference: project.emailSendPreference,
@@ -128,11 +130,13 @@ export const uplaodFile = async (req, res) => {
 
             await uploadFilesOnMinio(
                 project._id.toString(),
-                uploadFilename,
+                req.file.filename,
                 finalBuffer,
                 contentType,
                 process.env.MAIN_BUCKET
             );
+
+            serveFrom = "main"
         }
 
         await fs.promises.unlink(req.file.path);
@@ -162,7 +166,7 @@ export const uplaodFile = async (req, res) => {
         const newfile = new Model.File({
             originalfilename: req.file.originalname,
             type: fileType,
-            filename: uploadFilename,
+            filename: req.file.filename,
             size: filesizeinmb,
             publicUrl,
             downloadeUrl,
@@ -170,6 +174,7 @@ export const uplaodFile = async (req, res) => {
             deleteUrl,
             projectid: project._id,
             owner: user._id,
+            serveFrom
         });
 
         await Model.User.updateOne(

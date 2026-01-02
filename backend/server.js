@@ -17,6 +17,9 @@ app.use('/api/v2/user' , cors(corsFrontend) , monitoringMiddleware  , userRoutes
 app.use('/api/v2/devload' , cors(packageCors) , packageRoutes)
 
 
+// worker
+import './src/worker/index.js'
+
 
 server.listen(process.env.PORT , ()=> {
     console.log(`server is running on http://localhost:${process.env.PORT}`)
