@@ -40,7 +40,7 @@ const projectschema = new mongoose.Schema({
   },
   fileTypeAllowed: {
     type: [String],
-    enum: ['image', 'video', 'audio', 'document'],
+    enum: ['image', 'video', 'audio'],
     default: ['image', 'audio']
   },
   maxapikey: {

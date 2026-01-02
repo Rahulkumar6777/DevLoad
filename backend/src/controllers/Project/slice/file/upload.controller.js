@@ -47,14 +47,7 @@ export const uplaodFile = async (req, res) => {
             (finalBuffer.length / (1024 * 1024)).toFixed(2)
         );
 
-        const fileType =
-            isImage
-                ? "image"
-                : isVideo
-                    ? "video"
-                    : req.file.mimetype.startsWith("audio/")
-                        ? "audio"
-                        : "document";
+        const fileType = isImage ? "image" : isVideo ? "video" : "audio";
 
 
         const isAllowed = await Model.Project.findOne({
