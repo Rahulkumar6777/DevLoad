@@ -149,19 +149,19 @@ export const uplaodFile = async (req, res) => {
 
         const publicUrl = `${protocol}://${req.get(
             "host"
-        )}/public/${project._id}/${uploadFilename}`;
+        )}/public/${project._id}/${req.file.filename}`;
 
         const deleteUrl = `${protocol}://${req.get(
             "host"
-        )}/api/v2/devload/file/${uploadFilename}`;
+        )}/api/v2/devload/file/${req.file.filename}`;
 
         const fDeleteUr = `${protocol}://${req.get(
             "host"
-        )}/api/v2/user/file/${uploadFilename}`;
+        )}/api/v2/user/file/${req.file.filename}`;
 
         const downloadeUrl = `${protocol}://${req.get(
             "host"
-        )}/api/v2/file/${uploadFilename}`;
+        )}/api/v2/file/${req.file.filename}`;
 
         const newfile = new Model.File({
             originalfilename: req.file.originalname,
