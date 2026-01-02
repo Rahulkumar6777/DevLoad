@@ -2,12 +2,12 @@ import { s3client } from '../configs/s3client.js';
 import { DeleteObjectCommand } from '@aws-sdk/client-s3'
 
 
-export const deleteFromMinio = async (key) => {
+export const deleteFromMinio = async (key, bucketname) => {
     try {
         const client = s3client();
 
         const cmd = new DeleteObjectCommand({
-            Bucket: "temp",
+            Bucket: bucketname,
             Key: key,
         });
 
