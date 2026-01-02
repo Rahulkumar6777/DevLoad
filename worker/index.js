@@ -379,6 +379,7 @@ worker.on("completed", async (job) => {
     {
       projectId: projectid,
       filename,
+      bucket: "temp"
     },
     {
       delay: tempCleanupAt - Date.now(),
