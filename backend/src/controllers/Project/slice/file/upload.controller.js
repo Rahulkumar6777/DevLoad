@@ -150,7 +150,7 @@ export const uplaodFile = async (req, res) => {
 
         const fDeleteUr = `${protocol}://${req.get(
             "host"
-        )}/api/v2/user/file/${project._id}/${req.file.filename}`;
+        )}/api/v2/user/file/${req.file.filename}`;
 
         const downloadeUrl = `${protocol}://${req.get(
             "host"

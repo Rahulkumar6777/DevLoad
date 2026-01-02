@@ -31,6 +31,6 @@ router.route('/project/:projectId/upload').post(verifyJWT,
     virusScanning,
     Project.file.uplaodFile
 )
-router.route("/:projectId/:filename").delete(verifyJWT , Project.file.delete)
+router.route("/:filename").delete(verifyJWT , Project.file.delete)
 
 export default router
