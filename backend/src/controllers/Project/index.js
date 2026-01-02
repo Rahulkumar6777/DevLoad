@@ -1,5 +1,6 @@
 import { createProject } from "./slice/core/createProject.js";
 import {deleteProject} from './slice/core/deleteProject.controller.js'
+import { PublicUrl } from "./slice/file/get.controller.js";
 import { uplaodFile } from "./slice/file/upload.controller.js";
 
 export const Project = {
@@ -8,6 +9,7 @@ export const Project = {
         deleteProject: deleteProject
     },
     file: {
-        uplaodFile: uplaodFile
+        uplaodFile: uplaodFile,
+        get: PublicUrl
     }
 }
