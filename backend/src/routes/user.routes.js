@@ -40,4 +40,8 @@ router.post("/password" , verifyJWT , updateUserDetails.password)
 router.post("/email" , verifyJWT , updateUserDetails.email)
 router.post("/fullname" , verifyJWT , updateUserDetails.updatefullname)
 
+
+// Project API keys
+router.post("/projects/:projectid/api-keys", verifyJWT, Project.apiKey.createApiKey);
+
 export default router;
