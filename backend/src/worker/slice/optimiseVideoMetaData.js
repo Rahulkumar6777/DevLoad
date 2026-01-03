@@ -25,7 +25,11 @@ const worker = new Worker("process-video-complete", async (job) => {
         {
             $inc: {
                 requestsUsed: 1,
-                storageUsed: -updateSize,
+                totaloptimisedfile: 1,
+                optimisedRawBytes: oldFileSize,
+                storageUsed: optmisedVideoSize,
+                storageProcessing: -oldFileSize,
+                optimisedFinalBytes: optmisedVideoSize, 
                 savedStorage: updateSize
             },
         }

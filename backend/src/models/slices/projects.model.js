@@ -22,6 +22,10 @@ const projectschema = new mongoose.Schema({
     type: Number,
     default: 1000000000
   },
+  storageProcessing: {
+    type: Number,
+    default: 0
+  },
   requestsUsed: {
     type: Number,
     default: 0,
@@ -35,6 +39,18 @@ const projectschema = new mongoose.Schema({
     default: 0,
   },
   totaloptimisedfile: {
+    type: Number,
+    default: 0
+  },
+  optimisedRawBytes: {
+    type: Number,
+    default: 0
+  },
+  optimisedFinalBytes: {
+    type: Number,
+    default: 0
+  },
+  savedStorage: {
     type: Number,
     default: 0
   },
@@ -71,14 +87,6 @@ const projectschema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  savedStorage: {
-    type: Number,
-    default: 0,
-  },
-  totalrawstorageofoptimisedfile: {
-    type: Number,
-    default: 0
-  }
 
 },
   { timestamps: true });

@@ -48,19 +48,27 @@ export const uplaodFile = async (req, res) => {
 
 
         const isAllowed = await Model.Project.findOne({
-            userid: user._id,
             _id: project._id,
-            storageUsed: {
-                $lte: project.projectstoragelimit - filesize,
-            },
+            userid: user._id,
+            $expr: {
+                $lte: [
+                    { $add: ["$storageUsed", "$storageProcessing", filesize] },
+                    "$projectstoragelimit"
+                ]
+            }
         });
+
 
         const isAlloweds = await Model.User.findOne({
             _id: user._id,
-            storageUsed: {
-                $lte: user.maxStorage - filesize,
-            },
+            $expr: {
+                $lte: [
+                    { $add: ["$storageUsed", filesize] },
+                    "$maxStorage"
+                ]
+            }
         });
+
 
         if (!isAlloweds) {
             fs.unlinkSync(req.file.path);
@@ -117,6 +125,19 @@ export const uplaodFile = async (req, res) => {
                             userEmailSendPreference: project.emailSendPreference,
                         }
                     );
+                    await Model.Project.updateOne(
+                        {
+                            userid: user._id,
+                            _id: project._id,
+                        },
+                        {
+                            $inc: {
+                                totalUploads: 1,
+                                requestsUsed: 1,
+                                storageProcessing: filesize,
+                            },
+                        }
+                    );
                 }
             }
         } else {
@@ -171,6 +192,23 @@ export const uplaodFile = async (req, res) => {
             underProcessing
         });
 
+        if (!isVideo) {
+            await Model.Project.updateOne(
+                {
+                    userid: user._id,
+                    _id: project._id,
+                },
+                {
+                    $inc: {
+                        totalUploads: 1,
+                        requestsUsed: 1,
+                        storageUsed: filesize,
+                    },
+                }
+            );
+        }
+
+
         await Model.User.updateOne(
             {
                 _id: user._id,
@@ -181,20 +219,6 @@ export const uplaodFile = async (req, res) => {
                 $inc: {
                     storageUsed: filesize,
                     requestsUsed: 1,
-                },
-            }
-        );
-
-        await Model.Project.updateOne(
-            {
-                userid: user._id,
-                _id: project._id,
-            },
-            {
-                $inc: {
-                    totalUploads: 1,
-                    requestsUsed: 1,
-                    storageUsed: filesize,
                 },
             }
         );
