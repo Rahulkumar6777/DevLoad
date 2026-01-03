@@ -52,8 +52,7 @@ export const deleteFile = async (req, res) => {
                 },
                 {
                     delay: tempCleanupAt - Date.now(),
-                    removeOnComplete: true,
-                    removeOnFail: false,
+                    removeOnComplete: true
                 }
             );
         }
