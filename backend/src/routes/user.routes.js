@@ -37,5 +37,6 @@ router.route("/:filename").delete(verifyJWT , Project.file.delete)
 
 // user routes for update user details
 router.post("/password" , verifyJWT , updateUserDetails.password)
+router.post("/email" , verifyJWT , updateUserDetails.email)
 
 export default router
