@@ -32,18 +32,20 @@ router.route('/project/:projectId/upload').post(verifyJWT,
     virusScanning,
     Project.file.uplaodFile
 )
-router.route("/:filename").delete(verifyJWT , Project.file.delete)
+router.route("/:filename").delete(verifyJWT, Project.file.delete)
 
 
 // user routes for update user details
-router.post("/password" , verifyJWT , updateUserDetails.password)
-router.post("/email" , verifyJWT , updateUserDetails.email)
-router.post("/fullname" , verifyJWT , updateUserDetails.updatefullname)
+router.post("/password", verifyJWT, updateUserDetails.password)
+router.post("/email", verifyJWT, updateUserDetails.email)
+router.post("/fullname", verifyJWT, updateUserDetails.updatefullname)
 
 
 // Project API keys
-router.post("/projects/:projectid/api-keys", verifyJWT, Project.apiKey.createApiKey);
-router.delete("/projects/:projectid/api-keys", verifyJWT, Project.apiKey.deleteApiKey);
-router.get("/projects/:projectid/api-keys", verifyJWT, Project.apiKey.getApiKey);
-router.post("/projects/:projectid/api-keys/rotate", verifyJWT, Project.apiKey.updateApiKey);
+router.post("/project/:projectid/api-keys", verifyJWT, Project.apiKey.createApiKey);
+router.delete("/project/:projectid/api-keys", verifyJWT, Project.apiKey.deleteApiKey);
+router.get("/project/:projectid/api-keys", verifyJWT, Project.apiKey.getApiKey);
+router.post("/project/:projectid/api-keys/rotate", verifyJWT, Project.apiKey.updateApiKey);
+
+
 export default router;
