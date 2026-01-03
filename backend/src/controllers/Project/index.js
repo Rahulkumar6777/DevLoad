@@ -1,5 +1,7 @@
 import { CreateApiKey } from "./slice/ApiKeys/CreateApiKey.js";
 import { DeleteApiKey } from "./slice/ApiKeys/DeleteApiKey.js";
+import { ApiKeys } from "./slice/ApiKeys/GetApiKey.js";
+import { RotateApiKey } from "./slice/ApiKeys/RotateApiKey.js";
 import { createProject } from "./slice/core/createProject.js";
 import {deleteProject} from './slice/core/deleteProject.controller.js'
 import { deleteFile } from "./slice/file/delete.controller.js";
@@ -18,6 +20,8 @@ export const Project = {
     },
     apiKey: {
         createApiKey: CreateApiKey,
-        deleteApiKey: DeleteApiKey
+        deleteApiKey: DeleteApiKey,
+        getApiKey: ApiKeys,
+        updateApiKey: RotateApiKey 
     }
 }
