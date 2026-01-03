@@ -5,6 +5,7 @@ import { RotateApiKey } from "./slice/ApiKeys/RotateApiKey.js";
 import { createProject } from "./slice/core/createProject.js";
 import {deleteProject} from './slice/core/deleteProject.controller.js'
 import { AddDomain } from "./slice/Domain/AddDomain.js";
+import { DeleteDomain } from "./slice/Domain/DeleteDomain.js";
 import { deleteFile } from "./slice/file/delete.controller.js";
 import { PublicUrl } from "./slice/file/get.controller.js";
 import { uplaodFile } from "./slice/file/upload.controller.js";
@@ -36,6 +37,7 @@ export const Project = {
         FileType: FileType
     },
     domain: {
-        addDomain: AddDomain
+        addDomain: AddDomain,
+        deleteDomain: DeleteDomain
     }
 }
