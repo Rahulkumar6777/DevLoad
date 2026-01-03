@@ -4,6 +4,7 @@ import { verifyJWT } from "../middleware/Auth.js";
 import { Project } from '../controllers/Project/index.js'
 import { upload } from "../middleware/multerForFrontend.middleware.js";
 import { virusScanning } from "../middleware/viruScanning.middleware.js";
+import { updateUserDetails } from "../controllers/user/index.js";
 
 const router = express.Router();
 
@@ -32,5 +33,9 @@ router.route('/project/:projectId/upload').post(verifyJWT,
     Project.file.uplaodFile
 )
 router.route("/:filename").delete(verifyJWT , Project.file.delete)
+
+
+// user routes for update user details
+router.post("/password" , verifyJWT , updateUserDetails.password)
 
 export default router
