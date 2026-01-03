@@ -1,4 +1,5 @@
 import { CreateApiKey } from "./slice/ApiKeys/CreateApiKey.js";
+import { DeleteApiKey } from "./slice/ApiKeys/DeleteApiKey.js";
 import { createProject } from "./slice/core/createProject.js";
 import {deleteProject} from './slice/core/deleteProject.controller.js'
 import { deleteFile } from "./slice/file/delete.controller.js";
@@ -16,6 +17,7 @@ export const Project = {
         delete: deleteFile
     },
     apiKey: {
-        createApiKey: CreateApiKey
+        createApiKey: CreateApiKey,
+        deleteApiKey: DeleteApiKey
     }
 }
