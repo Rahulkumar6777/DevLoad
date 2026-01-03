@@ -7,10 +7,10 @@ import {deleteProject} from './slice/core/deleteProject.controller.js'
 import { deleteFile } from "./slice/file/delete.controller.js";
 import { PublicUrl } from "./slice/file/get.controller.js";
 import { uplaodFile } from "./slice/file/upload.controller.js";
-import { FileType } from "./slice/settings/settings/FileType.js";
-import { ProjectStorage } from "./slice/settings/settings/ProjectStorage.js";
-import { RenameProject } from "./slice/settings/settings/RenameProject.js";
-import { UpdateDescription } from "./slice/settings/settings/UpdateDescription.js";
+import { FileType } from "./slice/settings/FileType.js";
+import { ProjectStorage } from "./slice/settings/ProjectStorage.js";
+import { RenameProject } from "./slice/settings/RenameProject.js";
+import { UpdateDescription } from "./slice/settings/UpdateDescription.js";
 
 export const Project = {
     core: {

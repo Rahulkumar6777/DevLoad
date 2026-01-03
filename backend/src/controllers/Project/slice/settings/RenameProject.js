@@ -1,4 +1,4 @@
-import { Model } from '../../../../../models/index.js'
+import { Model } from '../../../../models/index.js'
 
 const RenameProject = async(req , res)=>{
     try {
