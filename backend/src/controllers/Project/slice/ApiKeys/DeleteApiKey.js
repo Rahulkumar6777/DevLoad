@@ -1,5 +1,4 @@
-import { Apikey } from "../../../../Models/apikey.model.js";
-import { Project } from "../../../../Models/projects.model.js";
+import { Model } from "../../../../models/index.js";
 
 const DeleteApiKey = async(req, res)=>{
     try {
@@ -23,21 +22,21 @@ const DeleteApiKey = async(req, res)=>{
             })
         }
 
-        const projectfind = await Project.find({ userid: user._id, _id: projectid , isActive: 'active' })
+        const projectfind = await Model.Project.find({ userid: user._id, _id: projectid , isActive: 'active' })
         if (!projectfind) {
             return res.status(400).json({
                 message: "Project Not Found"
             })
         }
 
-        if(!await Apikey.findOneAndDelete({userid: user._id, key: apikey})){
+        if(!await Model.Apikey.findOneAndDelete({userid: user._id, key: apikey})){
             return res.status(400).json({
                 message: "Invalid APikey"
             })
         }
 
 
-       await Project.updateOne({userid: user._id , _id: projectid},
+       await Model.Project.updateOne({userid: user._id , _id: projectid},
             {$inc: {ownapikey: -1}}
        )
 
