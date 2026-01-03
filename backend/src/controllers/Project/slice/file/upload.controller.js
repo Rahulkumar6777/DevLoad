@@ -18,6 +18,12 @@ export const uplaodFile = async (req, res) => {
         const isImage = req.file.mimetype.startsWith("image/");
         const isVideo = req.file.mimetype.startsWith("video/");
 
+        if (req.file.size > project.maxfilesize) {
+            fs.unlinkSync(req.file.path);
+            return res.status(400).json({
+                message: "max file size! please check your project setting"
+            })
+        }
 
         if (isImage) {
             const originalBuffer = await fs.promises.readFile(req.file.path);

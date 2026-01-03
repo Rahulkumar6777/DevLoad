@@ -25,7 +25,7 @@ const authorizeFileAccess = async (req, res, next) => {
             })
         }
 
-        const file = await Model.File.findOne({ filename }).populate('owner');
+        const file = await Model.File.findOne({ filename }).populate('owner').populate("projectid");
         if (!file) {
             return res.status(400).json({ message: "file not exist" });
         }

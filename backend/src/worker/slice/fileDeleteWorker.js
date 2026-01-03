@@ -23,6 +23,9 @@ const worker = new Worker("temp-video-delete", async (job) => {
     concurrency: 1
 })
 
+worker.on("active", job => {
+  console.log(`Processing job ${job.id}`);
+});
 
 worker.on("complete", async () => {
     console.log("file deleted")

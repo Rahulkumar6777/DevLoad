@@ -372,19 +372,19 @@ worker.on("completed", async (job) => {
   const queue = new Queue("process-video-complete", { connection });
 
   const filedeleteQueue = new Queue('temp-video-delete', { connection })
-  const tempCleanupAt = Date.now() + 6 * 60 * 1000
+  const tempCleanupAt = Date.now() + 2 * 60 * 1000
+  const bucket = 'temp'
 
   await filedeleteQueue.add(
     "temp-video-delete",
     {
       projectId: projectid,
       filename,
-      bucket: "temp"
+      bucket
     },
     {
       delay: tempCleanupAt - Date.now(),
       removeOnComplete: true,
-      removeOnFail: false,
     }
   );
   await queue.add("process-video-complete", {

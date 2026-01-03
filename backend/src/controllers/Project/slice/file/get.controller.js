@@ -5,7 +5,7 @@ const PublicUrl = async (req, res) => {
     try {
         const file = req.file;
         const filename = file.filename;
-        const projectid = file.projectid;
+        const projectid = file.projectid._id;
         const serveFrom = file.serveFrom;
 
         const client = s3client();

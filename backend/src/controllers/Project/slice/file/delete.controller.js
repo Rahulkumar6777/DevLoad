@@ -9,15 +9,21 @@ export const deleteFile = async (req, res) => {
         const filename = req.params.filename;
         const user = req.user;
 
-        const file = await Model.File.findOne({ filename });
+        const file = await Model.File.findOne({ filename }).populate("projectid")
         if (!file) {
             return res.status(404).json({
                 message: "Invalid filename"
             })
         }
 
-        const project = file.projectid;
+        const project = file.projectid._id;
         const owner = file.owner;
+
+        if (project.isActive === "softdelete") {
+            return res.status(400).json({
+                message: "Project is Scheduled for deletation"
+            })
+        }
 
         if (owner.toString() !== user._id.toString()) {
             return res.status(400).json({
@@ -41,7 +47,7 @@ export const deleteFile = async (req, res) => {
                 }
             )
             const filedeleteQueue = makeQueue('temp-video-delete', { connection })
-            const tempCleanupAt = process.env.NODE_ENV === "production" ? Date.now() + 3 * 60 * 60 * 1000 : Date.now() + 10 * 60 * 1000
+            const tempCleanupAt = process.env.NODE_ENV === "production" ? Date.now() + 3 * 60 * 60 * 1000 : Date.now() + 3 * 60 * 1000
 
             await filedeleteQueue.add(
                 "temp-video-delete",

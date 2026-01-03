@@ -8,7 +8,7 @@ const projectDeleteQueue = makeQueue('projectDeleteQueue');
 export const deleteProject = async (req, res) => {
     try {
         const userId = req.user._id;
-        const { projectid } = req.params;
+        const { projectid } = req.body
 
         if (!projectid) {
             return res.status(400).json({

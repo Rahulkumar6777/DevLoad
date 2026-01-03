@@ -28,7 +28,7 @@ const storage = multer.diskStorage({
 
       const projectexist = await Model.Project.findOne({ _id: projectid, userid: user._id, isActive: 'active' });
       if (!projectexist) {
-        return cb(new Error("invalid Project Id or frozen project"), false)
+        return cb(new Error("invalid Project Id"), false)
       }
 
       const filetypeallowed = projectexist.fileTypeAllowed;
