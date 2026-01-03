@@ -20,7 +20,7 @@ const projectschema = new mongoose.Schema({
   },
   projectstoragelimit: {
     type: Number,
-    default: 1024
+    default: 1000000000
   },
   requestsUsed: {
     type: Number,
@@ -28,7 +28,7 @@ const projectschema = new mongoose.Schema({
   },
   maxfilesize: {
     type: Number,
-    default: 15
+    default: 50000000
   },
   totalUploads: {
     type: Number,

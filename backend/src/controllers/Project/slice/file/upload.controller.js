@@ -42,10 +42,7 @@ export const uplaodFile = async (req, res) => {
             finalBuffer = fs.readFileSync(req.file.path);
         }
 
-
-        const filesizeinmb = Number(
-            (finalBuffer.length / (1024 * 1024)).toFixed(2)
-        );
+        const filesize = finalBuffer.length
 
         const fileType = isImage ? "image" : isVideo ? "video" : "audio";
 
@@ -54,14 +51,14 @@ export const uplaodFile = async (req, res) => {
             userid: user._id,
             _id: project._id,
             storageUsed: {
-                $lte: project.projectstoragelimit - filesizeinmb,
+                $lte: project.projectstoragelimit - filesize,
             },
         });
 
         const isAlloweds = await Model.User.findOne({
             _id: user._id,
             storageUsed: {
-                $lte: user.maxStorage - filesizeinmb,
+                $lte: user.maxStorage - filesize,
             },
         });
 
@@ -83,7 +80,7 @@ export const uplaodFile = async (req, res) => {
 
 
         if (isVideo) {
-            if (project.isOptimise && user.subscription === "member") {
+            if (user.subscription === "member") {
                 const videoProcessingQueue = makeQueue(
                     "devload-video-processing"
                 );
@@ -106,19 +103,21 @@ export const uplaodFile = async (req, res) => {
 
 
                 serveFrom = "temp"
-                underProcessing= true
+                underProcessing = true
 
-                await videoProcessingQueue.add(
-                    "devload-video-processing",
-                    {
-                        url,
-                        projectId: project._id,
-                        filename: req.file.filename,
-                        userFullname: user.fullName,
-                        userEmail: user.email,
-                        userEmailSendPreference: project.emailSendPreference,
-                    }
-                );
+                if (project.isOptimise) {
+                    await videoProcessingQueue.add(
+                        "devload-video-processing",
+                        {
+                            url,
+                            projectId: project._id,
+                            filename: req.file.filename,
+                            userFullname: user.fullName,
+                            userEmail: user.email,
+                            userEmailSendPreference: project.emailSendPreference,
+                        }
+                    );
+                }
             }
         } else {
 
@@ -161,7 +160,7 @@ export const uplaodFile = async (req, res) => {
             originalfilename: req.file.originalname,
             type: fileType,
             filename: req.file.filename,
-            size: filesizeinmb,
+            size: filesize,
             publicUrl,
             downloadeUrl,
             fDeleteUr,
@@ -175,12 +174,12 @@ export const uplaodFile = async (req, res) => {
         await Model.User.updateOne(
             {
                 _id: user._id,
-                storageUsed: { $lte: user.maxStorage - filesizeinmb },
+                storageUsed: { $lte: user.maxStorage - filesize },
                 requestsUsed: { $lt: user.maxRequests },
             },
             {
                 $inc: {
-                    storageUsed: filesizeinmb.toFixed(2),
+                    storageUsed: filesize,
                     requestsUsed: 1,
                 },
             }
@@ -195,7 +194,7 @@ export const uplaodFile = async (req, res) => {
                 $inc: {
                     totalUploads: 1,
                     requestsUsed: 1,
-                    storageUsed: filesizeinmb.toFixed(2),
+                    storageUsed: filesize,
                 },
             }
         );
@@ -204,10 +203,9 @@ export const uplaodFile = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            fileid: newfile._id,
+            fileid: req.file.filename,
             filename: newfile.originalfilename,
-            storedFilename: uploadFilename,
-            filesize: `${filesizeinmb}MB`,
+            filesize: filesize / (1024 * 1024),
             filetype: newfile.type,
             publicUrl,
             downloadeUrl,

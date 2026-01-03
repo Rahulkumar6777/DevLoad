@@ -36,7 +36,7 @@ const fileschema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['active'],
+        enum: ['active', "deleted"],
         default: 'active'
     },
     serveFrom: {

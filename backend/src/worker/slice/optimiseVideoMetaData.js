@@ -2,6 +2,7 @@ import { Worker } from "bullmq";
 import { Model } from '../../models/index.js'
 import { getFileInfo } from "../../utils/uploadOnMinio.js";
 import { connection } from "../../utils/connection.js";
+import { deleteFromMinio } from "../../utils/deleteFileFromMinio.js";
 
 const worker = new Worker("process-video-complete", async (job) => {
     const { projectId, filename } = job.data;
@@ -9,13 +10,13 @@ const worker = new Worker("process-video-complete", async (job) => {
 
 
     const res = await getFileInfo(`${projectId}/${filename}`);
-    const optmisedVideoSize = (res.ContentLength / (1024 * 1024)).toFixed(2)
+    const optmisedVideoSize = res.ContentLength
 
     const file = await Model.File.findOne({ filename });
     const oldFileSize = file.size;
     const ownerId = file.owner;
 
-    const updateSize = parseInt(oldFileSize - optmisedVideoSize).toFixed(2)
+    const updateSize = parseInt(oldFileSize - optmisedVideoSize)
 
     await Model.Project.updateOne(
         {
@@ -46,6 +47,30 @@ const worker = new Worker("process-video-complete", async (job) => {
     file.size = optmisedVideoSize;
     file.underProcessing = false
     await file.save({ validateBeforeSave: false })
+
+    if (file.status === "deleted") {
+        await Model.User.updateOne({
+            _id: file.owner
+        },
+            {
+                $inc: {
+                    storageUsed: -optmisedVideoSize,
+                },
+            }
+        )
+
+        await Model.Project.updateOne({
+            _id: projectId
+        },
+            {
+                $inc: {
+                    storageUsed: -optmisedVideoSize,
+                },
+            }
+        )
+        await Model.File.deleteOne({ filename })
+        await deleteFromMinio(`${projectId}/${filename}`, process.env.TEMP_BUCKET);
+    }
 
 }, {
     connection,

@@ -39,8 +39,8 @@ const userschema = new mongoose.Schema({
   },
   maxStorage: {
     type: Number,
-    default: 1024,
-    enum: [1024, 5120],
+    default: 1000000000,
+    enum: [1000000000, 5000000000],
   },
   requestsUsed: {
     type: Number,
