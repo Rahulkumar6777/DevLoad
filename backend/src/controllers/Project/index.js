@@ -8,6 +8,7 @@ import { deleteFile } from "./slice/file/delete.controller.js";
 import { PublicUrl } from "./slice/file/get.controller.js";
 import { uplaodFile } from "./slice/file/upload.controller.js";
 import { RenameProject } from "./slice/settings/settings/RenameProject.js";
+import { UpdateDescription } from "./slice/settings/settings/UpdateDescription.js";
 
 export const Project = {
     core: {
@@ -26,6 +27,7 @@ export const Project = {
         updateApiKey: RotateApiKey 
     },
     settings: {
-        rename: RenameProject
+        rename: RenameProject,
+        updateDescription: UpdateDescription
     }
 }
