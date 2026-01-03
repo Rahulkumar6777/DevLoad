@@ -48,4 +48,7 @@ router.get("/project/:projectid/api-keys", verifyJWT, Project.apiKey.getApiKey);
 router.post("/project/:projectid/api-keys/rotate", verifyJWT, Project.apiKey.updateApiKey);
 
 
+// Project settings
+router.put("/projects/:projectid/settings/name", verifyJWT, Project.settings.rename)
+
 export default router;
