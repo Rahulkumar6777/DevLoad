@@ -29,6 +29,10 @@ const authorizeFileAccess = async (req, res, next) => {
         if (!file) {
             return res.status(400).json({ message: "file not exist" });
         }
+        
+        if(file.status === 'deleted'){
+            return res.status(400).json({ message: "file deleted" });
+        }
 
         const user = file.owner?.status;
         const limit = user === 'member' ? memberLimit : freeLimit;
