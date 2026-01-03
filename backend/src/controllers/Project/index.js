@@ -4,6 +4,7 @@ import { ApiKeys } from "./slice/ApiKeys/GetApiKey.js";
 import { RotateApiKey } from "./slice/ApiKeys/RotateApiKey.js";
 import { createProject } from "./slice/core/createProject.js";
 import {deleteProject} from './slice/core/deleteProject.controller.js'
+import { AddDomain } from "./slice/Domain/AddDomain.js";
 import { deleteFile } from "./slice/file/delete.controller.js";
 import { PublicUrl } from "./slice/file/get.controller.js";
 import { uplaodFile } from "./slice/file/upload.controller.js";
@@ -33,5 +34,8 @@ export const Project = {
         updateDescription: UpdateDescription,
         ProjectStorage: ProjectStorage,
         FileType: FileType
+    },
+    domain: {
+        addDomain: AddDomain
     }
 }
