@@ -52,5 +52,6 @@ router.post("/project/:projectid/api-keys/rotate", verifyJWT, Project.apiKey.upd
 router.put("/projects/:projectid/settings/name", verifyJWT, Project.settings.rename)
 router.put("/projects/:projectid/settings/description", verifyJWT, Project.settings.updateDescription)
 router.put("/projects/:projectid/settings/filetype", verifyJWT, Project.settings.FileType);
-
+router.put("/projects/:projectid/settings/storage", verifyJWT, Project.settings.ProjectStorage);
+router.post("/projects/:projectId/domain", verifyJWT, Project.domain.addDomain); 
 export default router;
