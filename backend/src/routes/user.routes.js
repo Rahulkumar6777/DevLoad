@@ -54,4 +54,6 @@ router.put("/projects/:projectid/settings/description", verifyJWT, Project.setti
 router.put("/projects/:projectid/settings/filetype", verifyJWT, Project.settings.FileType);
 router.put("/projects/:projectid/settings/storage", verifyJWT, Project.settings.ProjectStorage);
 router.post("/projects/:projectId/domain", verifyJWT, Project.domain.addDomain); 
+router.delete("/projects/:projectId/domain", verifyJWT, Project.domain.deleteDomain); 
+
 export default router;
