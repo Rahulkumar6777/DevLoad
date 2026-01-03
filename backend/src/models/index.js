@@ -1,5 +1,6 @@
 import { Apikey } from "./slices/apikey.model.js";
 import { DeleteUserAccountModel } from "./slices/DeleteUserAccount.model.js";
+import { Domain } from "./slices/domain.model.js";
 import { File } from "./slices/file.model.js";
 import { OtpValidate } from "./slices/otpValidator.model.js";
 import { Project } from "./slices/projects.model.js";
@@ -13,5 +14,6 @@ export const Model = {
     OtpValidate,
     DeleteUserAccountModel,
     Apikey,
-    File
+    File,
+    Domain
 }
