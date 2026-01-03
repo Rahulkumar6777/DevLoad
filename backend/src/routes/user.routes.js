@@ -45,4 +45,5 @@ router.post("/fullname" , verifyJWT , updateUserDetails.updatefullname)
 router.post("/projects/:projectid/api-keys", verifyJWT, Project.apiKey.createApiKey);
 router.delete("/projects/:projectid/api-keys", verifyJWT, Project.apiKey.deleteApiKey);
 router.get("/projects/:projectid/api-keys", verifyJWT, Project.apiKey.getApiKey);
+router.post("/projects/:projectid/api-keys/rotate", verifyJWT, Project.apiKey.updateApiKey);
 export default router;
