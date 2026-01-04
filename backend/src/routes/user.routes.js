@@ -33,7 +33,7 @@ router.route('/project/:projectId/upload').post(verifyJWT,
     Project.file.uplaodFile
 )
 router.route("/:filename").delete(verifyJWT, Project.file.delete)
-
+router.get("/projects", verifyJWT, Project.getProjectdata.allProject);
 
 // user routes for update user details
 router.post("/password", verifyJWT, updateUserDetails.password)
