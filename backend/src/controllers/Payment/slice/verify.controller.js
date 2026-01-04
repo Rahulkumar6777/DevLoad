@@ -55,8 +55,8 @@ const paymentVerify = async (req, res) => {
 
 
             const now = new Date();
-            const subscriptionend = new Date(now.getTime() + months * 30 * 24 * 60 * 60 * 1000);
-
+            const subscriptionend = new Date(now.getTime() + months * 30 * 24 * 60 * 60 * 1000);  // here later i send this on worker queue so it handle expiry
+            const isBeforeExpiryDate = new Date(now.getTime() + months * 25 * 24 * 60 * 60 * 1000) // here i notify user to renew service
 
             // Update user subscription details
 

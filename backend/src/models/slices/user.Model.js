@@ -71,6 +71,9 @@ const userschema = new mongoose.Schema({
   refreshtoken: {
     type: String,
   },
+  isBeforeExpiryDate: {
+    type: Date,
+  },
   isUnderRenew: {
     type: Boolean,
     default: false,
