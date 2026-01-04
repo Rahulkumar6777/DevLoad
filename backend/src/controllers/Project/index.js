@@ -9,6 +9,7 @@ import { DeleteDomain } from "./slice/Domain/DeleteDomain.js";
 import { deleteFile } from "./slice/file/delete.controller.js";
 import { PublicUrl } from "./slice/file/get.controller.js";
 import { uplaodFile } from "./slice/file/upload.controller.js";
+import { GetProjectFullData } from "./slice/GetData/GetProjectFullData.js";
 import { GetProject } from "./slice/GetData/GetProjects.js";
 import { FileType } from "./slice/settings/FileType.js";
 import { ProjectStorage } from "./slice/settings/ProjectStorage.js";
@@ -42,6 +43,7 @@ export const Project = {
         deleteDomain: DeleteDomain
     },
     getProjectdata: {
-        allProject: GetProject
+        allProject: GetProject,
+        singleProjectAllData: GetProjectFullData 
     }
 }
