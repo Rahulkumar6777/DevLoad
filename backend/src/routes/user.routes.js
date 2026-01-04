@@ -13,6 +13,7 @@ const router = express.Router();
 router.post('/auth/register/init', Auth.register.init);
 router.post('/auth/register/verify', Auth.register.verify);
 router.post('/auth/login', Auth.Login)
+router.get('/auth/refresh-token', Auth.RefreshToken)
 
 
 // project route
