@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
@@ -10,7 +10,6 @@ import { privateAppDomain } from '../api/PrivateAppDomain';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // All tokens stored in memory only - more secure
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [accessToken, setAccessToken] = useState(null);
@@ -19,12 +18,15 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  
+  
+  const hasCheckedAuth = useRef(false);
 
   const isTokenNearExpiry = (token) => {
     if (!token) return true;
     try {
       const { exp } = jwtDecode(token);
-      return exp * 1000 < Date.now() + 5 * 60 * 1000;
+      return exp * 1000 < Date.now() + 5 * 60 * 1000; 
     } catch {
       return true;
     }
@@ -40,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 
     setIsLoading(true);
     
-   
+    
     try {
       const response = await axios.get(`${BaseUrl}/auth/refresh-token`, {
         withCredentials: true,
@@ -69,13 +71,16 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(false);
       setIsAuthReady(true);
     }
-  }, [navigate, location, recentLogin, dispatch]);
-
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
+  }, [recentLogin, dispatch, location, navigate]);
 
   
+  useEffect(() => {
+    if (!hasCheckedAuth.current) {
+      hasCheckedAuth.current = true;
+      checkAuth();
+    }
+  }, []); 
+
   useEffect(() => {
     if (accessToken && !isTokenNearExpiry(accessToken)) {
       const { exp } = jwtDecode(accessToken);
@@ -95,8 +100,9 @@ export const AuthProvider = ({ children }) => {
     );
     if (response.status === 200 && response.data.accessToken) {
       setIsAuthenticated(true);
-      setAccessToken(response.data.accessToken);
+      setAccessToken(response.data.accessToken); 
       setRecentLogin(true);
+      hasCheckedAuth.current = true; 
       const redirectTo = location.state?.from?.pathname || '/';
       navigate(redirectTo, { replace: true });
     } else {
@@ -144,12 +150,16 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(false);
       dispatch(resetBootstrap());
       setAccessToken(null);
+      hasCheckedAuth.current = false; 
+      
       window.location.replace(privateAppDomain);
     } catch (error) {
       console.error('Logout failed:', error.message);
+      
       setIsAuthenticated(false);
       dispatch(resetBootstrap());
       setAccessToken(null);
+      hasCheckedAuth.current = false;
       window.location.replace(privateAppDomain);
     }
   };
@@ -157,7 +167,7 @@ export const AuthProvider = ({ children }) => {
   const accountdelete = async () => {
     let token = accessToken;
     try {
-      await axios.delete(`${BaseUrl}/users/account`, {
+      await axios.delete(`${BaseUrl}delete`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -167,12 +177,16 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(false);
       dispatch(resetBootstrap());
       setAccessToken(null);
+      hasCheckedAuth.current = false; 
+      
       window.location.replace(privateAppDomain);
     } catch (error) {
       console.error('Delete failed:', error.message);
+      
       setIsAuthenticated(false);
       dispatch(resetBootstrap());
       setAccessToken(null);
+      hasCheckedAuth.current = false;
     }
   };
 

@@ -25,14 +25,14 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 relative overflow-hidden">
-      {/* Animated background elements */}
+      
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
       </div>
 
       <div className="relative bg-gray-800/70 backdrop-blur-xl p-8 rounded-2xl shadow-2xl border border-gray-700/50 max-w-md w-full space-y-6">
-        {/* Progress bar */}
+        
         {isLoading && (
           <div className="absolute top-0 left-0 right-0 h-1 bg-gray-700 rounded-t-2xl overflow-hidden">
             <div className="h-full bg-gradient-to-r from-indigo-600 to-purple-600 animate-[loading_1.5s_ease-in-out_infinite]"></div>
@@ -58,7 +58,7 @@ const Login = () => {
           }
         `}</style>
 
-        {/* Logo/Header */}
+        
         <div className="text-center space-y-2">
           <div className="inline-block p-3 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl mb-2">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,7 +71,7 @@ const Login = () => {
           <p className="text-gray-400 text-sm">Sign in to Dev<span className="text-red-500">L</span>oad</p>
         </div>
 
-        {/* Error message */}
+        
         {error && (
           <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3 flex items-start gap-2 animate-shake">
             <svg className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
@@ -82,7 +82,7 @@ const Login = () => {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email Input */}
+          
           <div className="space-y-2">
             <label htmlFor="email" className="block text-gray-300 text-sm font-medium">
               Email Address
@@ -106,7 +106,6 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Password Input */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label htmlFor="password" className="block text-gray-300 text-sm font-medium">
@@ -155,7 +154,7 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Remember Me */}
+          
           <div className="flex items-center">
             <input
               type="checkbox"
@@ -170,7 +169,7 @@ const Login = () => {
             </label>
           </div>
 
-          {/* Login Button */}
+         
           <button
             type="submit"
             disabled={isLoading}
@@ -195,7 +194,7 @@ const Login = () => {
           </button>
         </form>
 
-        {/* Divider */}
+        
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-700"></div>
@@ -207,7 +206,7 @@ const Login = () => {
           </div>
         </div>
 
-        {/* Sign Up Link */}
+        
         <Link 
           to="/signup" 
           className="block w-full text-center py-3 rounded-lg border-2 border-gray-700 text-gray-300 hover:border-indigo-500 hover:text-white font-medium transition-all duration-200 group"
@@ -220,7 +219,7 @@ const Login = () => {
           </span>
         </Link>
 
-        {/* Footer */}
+        
         <p className="text-center text-xs text-gray-500 mt-6">
           Protected by industry-standard encryption
         </p>

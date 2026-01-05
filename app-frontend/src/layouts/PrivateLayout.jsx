@@ -10,7 +10,7 @@ export default function PrivateLayout() {
         <Sidebar />
         <div className="flex-1 md:ml-64 pt-16">
           <TopNavbar />
-            <div className="p-4 sm:p-6"> {/* Responsive padding */}
+            <div className="p-4 sm:p-6">
             <Outlet />
           </div>
         </div>
