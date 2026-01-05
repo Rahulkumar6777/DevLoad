@@ -21,6 +21,6 @@ app.use('/api/v2/devload' , cors(packageCors) , packageRoutes)
 import './src/worker/index.js'
 
 
-server.listen(process.env.PORT , ()=> {
+server.listen(process.env.PORT , "0.0.0.0", ()=> {
     console.log(`server is running on http://localhost:${process.env.PORT}`)
 });
