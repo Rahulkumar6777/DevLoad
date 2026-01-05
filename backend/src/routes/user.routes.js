@@ -5,6 +5,7 @@ import { Project } from '../controllers/Project/index.js'
 import { upload } from "../middleware/multerForFrontend.middleware.js";
 import { virusScanning } from "../middleware/viruScanning.middleware.js";
 import { updateUserDetails } from "../controllers/user/index.js";
+import { Payment } from "../controllers/Payment/index.js";
 
 const router = express.Router();
 
@@ -14,10 +15,12 @@ router.post('/auth/register/init', Auth.register.init);
 router.post('/auth/register/verify', Auth.register.verify);
 router.post('/auth/login', Auth.Login)
 router.get('/auth/refresh-token', Auth.RefreshToken)
+router.post('/auth/logout', verifyJWT, Auth.Logout)
 
 
 // project route
-router.route('/project').post(verifyJWT, Project.core.createProject).delete(verifyJWT, Project.core.deleteProject)
+router.route('/project').post(verifyJWT, Project.core.createProject)
+router.delete('/project/:projectId', verifyJWT, Project.core.deleteProject)
 router.route('/project/:projectId/upload').post(verifyJWT,
     (req, res, next) => {
         upload.single("file")(req, res, function (err) {
@@ -33,15 +36,18 @@ router.route('/project/:projectId/upload').post(verifyJWT,
     virusScanning,
     Project.file.uplaodFile
 )
-router.route("/:filename").delete(verifyJWT, Project.file.delete)
-router.get("/projects", verifyJWT, Project.getProjectdata.allProject);
-router.get("/projects/:projectid", verifyJWT, Project.getProjectdata.singleProjectAllData);
-router.get('/projects/:projectid/analytics' , verifyJWT , Project.getProjectdata.analytics)
+router.route("/file/:filename").delete(verifyJWT, Project.file.delete)
+router.get("/project", verifyJWT, Project.getProjectdata.allProject);
+router.get("/project/:projectid", verifyJWT, Project.getProjectdata.singleProjectAllData);
+router.get('/project/:projectid/analytics', verifyJWT, Project.getProjectdata.analytics)
 
 // user routes for update user details
-router.post("/password", verifyJWT, updateUserDetails.password)
-router.post("/email", verifyJWT, updateUserDetails.email)
-router.post("/fullname", verifyJWT, updateUserDetails.updatefullname)
+router.put("/password", verifyJWT, updateUserDetails.password)
+router.put("/email", verifyJWT, updateUserDetails.email)
+router.put("/fullname", verifyJWT, updateUserDetails.updatefullname)
+router.get('/subscription', verifyJWT, updateUserDetails.subsription)
+router.get('/bootstrap', verifyJWT, updateUserDetails.BootStrap)
+router.delete('delete', verifyJWT, updateUserDetails.delete)
 
 
 // Project API keys
@@ -52,11 +58,17 @@ router.post("/project/:projectid/api-keys/rotate", verifyJWT, Project.apiKey.upd
 
 
 // Project settings
-router.put("/projects/:projectid/settings/name", verifyJWT, Project.settings.rename)
-router.put("/projects/:projectid/settings/description", verifyJWT, Project.settings.updateDescription)
-router.put("/projects/:projectid/settings/filetype", verifyJWT, Project.settings.FileType);
-router.put("/projects/:projectid/settings/storage", verifyJWT, Project.settings.ProjectStorage);
-router.post("/projects/:projectId/domain", verifyJWT, Project.domain.addDomain); 
-router.delete("/projects/:projectId/domain", verifyJWT, Project.domain.deleteDomain); 
+router.put("/project/:projectid/settings/name", verifyJWT, Project.settings.rename)
+router.put("/project/:projectid/settings/description", verifyJWT, Project.settings.updateDescription)
+router.put("/project/:projectid/settings/filetype", verifyJWT, Project.settings.FileType);
+router.put("/project/:projectid/settings/storage", verifyJWT, Project.settings.ProjectStorage);
+router.patch("/project/:projectid/settings/processing", verifyJWT, Project.settings.processing);
+router.post("/project/:projectId/domain", verifyJWT, Project.domain.addDomain);
+router.delete("/project/:projectId/domain", verifyJWT, Project.domain.deleteDomain);
+
+
+// paymnet
+router.post('/payment' , verifyJWT , Payment.init)
+router.post('/payment/verify' , verifyJWT , Payment.verify)
 
 export default router;
