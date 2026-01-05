@@ -8,10 +8,10 @@ export const connection = new Redis("redis://redis:6379", {
   },
 });
 
-redisConnect.on("ready", () => {
+connection.on("ready", () => {
   console.log(" Redis READY (stable connection)");
 });
 
-redisConnect.on("error", (err) => {
+connection.on("error", (err) => {
   console.error(" Redis error:", err.message);
 });
