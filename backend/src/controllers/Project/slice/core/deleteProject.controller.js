@@ -8,7 +8,7 @@ const projectDeleteQueue = makeQueue('projectDeleteQueue');
 export const deleteProject = async (req, res) => {
     try {
         const userId = req.user._id;
-        const { projectid } = req.body
+        const projectid = req.params.projectId;
 
         if (!projectid) {
             return res.status(400).json({
@@ -35,12 +35,22 @@ export const deleteProject = async (req, res) => {
 
         project.isActive = 'softdelete';
 
-        await project.save({validateBeforeSave: false})
-        await projectDeleteQueue.add('projectDeleteQueue' , {
-            projectId: project._id
-        })
+        await project.save({ validateBeforeSave: false })
 
-        return  res.status(200).json({
+        const tempCleanupAt = process.env.NODE_ENV === 'production' ? Date.now() + 1 * 60 * 60 * 1000 : Date.now() + 3 * 60 * 1000
+
+        await projectDeleteQueue.add(
+            "projectDeleteQueue",
+            {
+                projectId: projectid,
+            },
+            {
+                delay: tempCleanupAt - Date.now(),
+                removeOnComplete: true,
+            }
+        );
+
+        return res.status(200).json({
             message: 'Project is scheduled for deletation'
         })
 

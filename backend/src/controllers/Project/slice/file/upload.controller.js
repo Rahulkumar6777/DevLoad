@@ -95,31 +95,33 @@ export const uplaodFile = async (req, res) => {
 
         if (isVideo) {
             if (user.subscription === "member") {
-                const videoProcessingQueue = makeQueue(
-                    "devload-video-processing"
-                );
-
-                await uploadFilesOnMinio(
-                    project._id.toString(),
-                    uploadFilename,
-                    finalBuffer,
-                    contentType,
-                    process.env.TEMP_BUCKET
-                );
-
-                const url = await generateSignedUrl(
-                    process.env.TEMP_BUCKET,
-                    `${project._id}/${uploadFilename}`,
-                    process.env.ENDPOINT,
-                    process.env.ACCESS_ID,
-                    process.env.ACCESS_KEY
-                );
-
-
-                serveFrom = "temp"
-                underProcessing = true
 
                 if (project.isOptimise) {
+
+                    const videoProcessingQueue = makeQueue(
+                        "devload-video-processing"
+                    );
+
+                    await uploadFilesOnMinio(
+                        project._id.toString(),
+                        uploadFilename,
+                        finalBuffer,
+                        contentType,
+                        process.env.TEMP_BUCKET
+                    );
+
+                    const url = await generateSignedUrl(
+                        process.env.TEMP_BUCKET,
+                        `${project._id}/${uploadFilename}`,
+                        process.env.ENDPOINT,
+                        process.env.ACCESS_ID,
+                        process.env.ACCESS_KEY
+                    );
+
+
+                    serveFrom = "temp"
+                    underProcessing = true
+
                     await videoProcessingQueue.add(
                         "devload-video-processing",
                         {
@@ -129,6 +131,16 @@ export const uplaodFile = async (req, res) => {
                             userFullname: user.fullName,
                             userEmail: user.email,
                             userEmailSendPreference: project.emailSendPreference,
+                        },
+                        {
+                            // retry config
+                            attempts: 3,
+                            backoff: {
+                                type: "exponential",
+                                delay: 10000
+                            },
+                            removeOnComplete: true,
+                            removeOnFail: false
                         }
                     );
                     await Model.Project.updateOne(
@@ -141,6 +153,28 @@ export const uplaodFile = async (req, res) => {
                                 totalUploads: 1,
                                 requestsUsed: 1,
                                 storageProcessing: filesize,
+                            },
+                        }
+                    );
+                } else {
+
+                    await uploadFilesOnMinio(
+                        project._id.toString(),
+                        uploadFilename,
+                        finalBuffer,
+                        contentType,
+                        process.env.MAIN_BUCKET
+                    );
+                    await Model.Project.updateOne(
+                        {
+                            userid: user._id,
+                            _id: project._id,
+                        },
+                        {
+                            $inc: {
+                                totalUploads: 1,
+                                requestsUsed: 1,
+                                storageUsed: filesize,
                             },
                         }
                     );
@@ -235,11 +269,12 @@ export const uplaodFile = async (req, res) => {
             success: true,
             fileid: req.file.filename,
             filename: newfile.originalfilename,
-            filesize: filesize / (1024 * 1024),
+            filesize: filesize,
             filetype: newfile.type,
             publicUrl,
             downloadeUrl,
             deleteUrl: fDeleteUr,
+            underProcessing
         });
     } catch (error) {
         console.log(error);
