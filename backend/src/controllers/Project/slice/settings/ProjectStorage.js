@@ -16,15 +16,15 @@ const ProjectStorage = async (req, res) => {
 
         if (requestStroage > usermaxstorage) {
             return res.status(400).json({
-                message: `you set max storage of your Project is less than your totalstorage${usermaxstorage}MB of your account!`
+                message: `you set max storage of your Project is less than your totalstorage${(usermaxstorage / (1024 * 1024)).toFixed(2)}MB of your account!`
             })
         }
 
         const projectupdate = await Model.Project.findOneAndUpdate(
             {
                 userid: user._id,
-                projectid,
-                $expr: { $lt: ["$storageUsed", "$storageProcessing" ,requestStroage] }
+                _id: projectid,
+                $expr: { $lt: ["$storageUsed", requestStroage] }
             },
             { $set: { projectstoragelimit: requestStroage } },
             { new: true }
