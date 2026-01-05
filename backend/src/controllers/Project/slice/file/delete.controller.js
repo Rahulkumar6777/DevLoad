@@ -46,7 +46,7 @@ export const deleteFile = async (req, res) => {
                     status: "deleted"
                 }
             )
-            const filedeleteQueue = makeQueue('temp-video-delete', { connection })
+            const filedeleteQueue = makeQueue('temp-video-delete')
             const tempCleanupAt = process.env.NODE_ENV === "production" ? Date.now() + 3 * 60 * 60 * 1000 : Date.now() + 3 * 60 * 1000
 
             await filedeleteQueue.add(

@@ -1,8 +1,10 @@
 import { Queue } from "bullmq";
+import { connection } from "../utils/connection.js"
 
 const makeQueue = (queueName) => {
-  const queue = new Queue(queueName);
-  return queue;
+  return new Queue(queueName, {
+    connection,
+  });
 };
 
 export { makeQueue };
