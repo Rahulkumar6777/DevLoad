@@ -53,4 +53,4 @@ jobs:
             docker rm frontend || true
             docker run -d --name frontend \
             --restart always \
-            -p 3000:80 ${{ secrets.DOCKER_USERNAME }}/frontend:latest
+            -p 127.0.0.1:3000:80 ${{ secrets.DOCKER_USERNAME }}/frontend:latest
