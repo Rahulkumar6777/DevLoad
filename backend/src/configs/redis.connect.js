@@ -1,8 +1,10 @@
 import Redis from "ioredis";
 
-export const redisConnect = new Redis("redis:6379" , {
+export const redisConnect = new Redis({
+  host: "redis", 
+  port: 6379,
   maxRetriesPerRequest: null,
-  enableReadyCheck: false
+  enableReadyCheck: false,
 });
 
 // Error handling
