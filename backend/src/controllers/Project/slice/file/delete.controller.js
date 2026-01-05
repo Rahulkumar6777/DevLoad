@@ -68,28 +68,31 @@ export const deleteFile = async (req, res) => {
             const size = file.size;
 
             await Model.User.updateOne(
-                {
-                    _id: user._id
-                },
-                {
-                    $inc: {
-                        storageUsed: -size,
-                        requestsUsed: 1,
-                    },
-                }
+                { _id: user._id },
+                [
+                    {
+                        $set: {
+                            requestsUsed: { $add: ["$requestsUsed", 1] },
+                            storageUsed: {
+                                $max: [{ $subtract: ["$storageUsed", size] }, 0]
+                            }
+                        }
+                    }
+                ]
             );
 
             await Model.Project.updateOne(
-                {
-                    userid: user._id,
-                    _id: project._id,
-                },
-                {
-                    $inc: {
-                        requestsUsed: 1,
-                        storageUsed: -size,
-                    },
-                }
+                { userid: user._id, _id: project._id },
+                [
+                    {
+                        $set: {
+                            requestsUsed: { $add: ["$requestsUsed", 1] },
+                            storageUsed: {
+                                $max: [{ $subtract: ["$storageUsed", size] }, 0]
+                            }
+                        }
+                    }
+                ]
             );
 
             await deleteFromMinio(`${project}/${filename}`, process.env.MAIN_BUCKET);
