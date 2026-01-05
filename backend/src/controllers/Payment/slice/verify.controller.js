@@ -3,11 +3,6 @@ import * as crypto from 'crypto'
 import { Model } from '../../../models/index.js';
 
 
-const razorpay = new Razorpay({
-    key_id: `${process.env.key_id}`,
-    key_secret: `${process.env.key_secret}`,
-});
-
 const paymentVerify = async (req, res) => {
 
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
@@ -71,16 +66,16 @@ const paymentVerify = async (req, res) => {
 
 
             user.subscription = "member";
-            user.maxStorage = 5000000000;
+            user.maxStorage = 5368709120;
             user.maxRequests = 15000;
             user.totalProject = 5;
 
             if (projectdata) {
-                await Project.updateOne(
+                await Model.Project.updateOne(
                     { userid: user._id },
                     {
                         $addToSet: { fileTypeAllowed: 'video' },
-                        $set: { maxfilesize: 1000000000, maxapikey: 5 }
+                        $set: { maxfilesize: 1073741824, maxapikey: 5 }
                     }
                 );
             }

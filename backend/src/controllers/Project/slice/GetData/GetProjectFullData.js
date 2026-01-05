@@ -42,7 +42,8 @@ const GetProjectFullData= async (req , res)=>{
             deleteurl: data.fDeleteUr,
             filetype: data.type,
             filesize: data.size,
-            fileid: data.filename
+            fileid: data.filename,
+            underProcessing: data.underProcessing
         }))
 
 
@@ -58,12 +59,18 @@ const GetProjectFullData= async (req , res)=>{
             alloweddomain: alloweddomains
         };
 
+        const processing = {
+            areYouWantToOptimise: findProject.isOptimise,
+            wantToSendEmailNotificationOnAfterOptimisation: findProject.emailSendPreference
+        }
+
 
         return res.status(200).json({
             files: filedata,
             settings: {
                 uploading: uploading,
                 project: project,
+                processing: processing
             }
         }
         )
