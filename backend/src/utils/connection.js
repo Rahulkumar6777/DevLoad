@@ -1,8 +1,17 @@
-import Redis from 'ioredis';
+import Redis from "ioredis";
 
+export const connection = new Redis("redis://redis:6379", {
+  maxRetriesPerRequest: 5,     
+  retryStrategy(times) {
+    if (times > 10) return null;
+    return Math.min(times * 500, 3000);
+  },
+});
 
-export const connection = new Redis({
-  host: 'redis',
-  port: 6379,
-  maxRetriesPerRequest: null,
+redisConnect.on("ready", () => {
+  console.log(" Redis READY (stable connection)");
+});
+
+redisConnect.on("error", (err) => {
+  console.error(" Redis error:", err.message);
 });

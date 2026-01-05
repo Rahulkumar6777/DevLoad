@@ -20,7 +20,7 @@ await connectDb();
 
 
 // redis connection
-import './src/configs/redis.connect.js';
+// import './src/configs/redis.connect.js';
 
 
 // make a express app
@@ -80,7 +80,7 @@ app.use(compression());
 
 //// Middleware to count requests
 import { requestCounter, startServerLogger } from "./src/middleware/serverLogger.middleware.js";
-app.use(requestCounter);
+// app.use(requestCounter);
 
 
 // Error handling middleware
