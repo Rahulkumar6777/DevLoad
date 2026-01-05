@@ -25,7 +25,8 @@ jobs:
             - name: Build Docker image
               run: docker build \
                 --build-arg VITE_RAZORPAY_KEY_ID="${{ secrets.VITE_RAZORPAY_KEY_ID }}" \
-                -t ${{ secrets.DOCKER_USERNAME }}/devload-app-frontend:latest ./app-frontend
+                -t ${{ secrets.DOCKER_USERNAME }}/devload-app-frontend:latest \
+                ./app-frontend
 
             - name: DockerHub login (access token)
               uses: docker/login-action@v2
