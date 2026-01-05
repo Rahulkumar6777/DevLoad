@@ -1,7 +1,7 @@
 import Redis from "ioredis";
 
-export const redisConnect = new Redis(process.env.REDIS_URL , {
-  maxRetriesPerRequest: null,   // 👈 ye zaroori hai
+export const redisConnect = new Redis("redis:6379" , {
+  maxRetriesPerRequest: null,
   enableReadyCheck: false
 });
 
