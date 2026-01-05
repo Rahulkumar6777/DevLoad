@@ -19,10 +19,6 @@ import { connectDb } from "./src/configs/db.connect.js";
 await connectDb();
 
 
-// redis connection
-// import './src/configs/redis.connect.js';
-
-
 // make a express app
 const app = express();
 
