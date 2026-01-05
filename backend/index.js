@@ -74,9 +74,6 @@ import compression from "compression";
 app.use(compression());
 
 
-//// Middleware to count requests
-import { requestCounter, startServerLogger } from "./src/middleware/serverLogger.middleware.js";
-// app.use(requestCounter);
 
 
 // Error handling middleware
@@ -86,17 +83,6 @@ app.use((err, req, res, next) => {
 });
 
 
-//// Start background logger
-const interval = 300000;
-const logger = process.env.NODE_ENV === "production" 
-  ? startServerLogger(interval) 
-  : null;
-
-if (logger) {
-  setInterval(() => {
-    logger();
-  }, interval);
-}
 
 
 export { app , server , io}
