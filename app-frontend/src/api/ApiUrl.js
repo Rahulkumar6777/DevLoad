@@ -1,4 +1,4 @@
-const NodeEnv = 'productions'
+const NodeEnv = 'production'
 
 const localhostURl = 'http://localhost:6700/api/v2/user'
 
