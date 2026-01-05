@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { Model} from '../../../models/index.js'
-import { RefreshtokenOption } from '../../../Utils/option.js';
+import { RefreshtokenOption } from '../../../utils/option.js';
 const RefreshToken = async (req ,res) => {
     try {
         const refrestoken = req.cookies?.RefreshToken;
