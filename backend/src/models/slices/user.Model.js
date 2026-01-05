@@ -39,8 +39,8 @@ const userschema = new mongoose.Schema({
   },
   maxStorage: {
     type: Number,
-    default: 1000000000,
-    enum: [1000000000, 5000000000],
+    default: 1073741824,
+    enum: [1073741824, 5368709120],
   },
   requestsUsed: {
     type: Number,
@@ -63,7 +63,7 @@ const userschema = new mongoose.Schema({
   status: {
     type: String,
     default: "active",
-    enum: ["active", "banned"],
+    enum: ["active", "banned" ,"deleted"],
   },
   suspensionEnd: {
     type: Date,
@@ -78,7 +78,7 @@ const userschema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-});
+}, {timestamps: true});
 
 
 // hash passwrd before save
