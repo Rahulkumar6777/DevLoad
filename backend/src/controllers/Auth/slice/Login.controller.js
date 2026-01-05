@@ -1,7 +1,7 @@
 import { body, validationResult } from "express-validator";
-import { GenerateAccessTokenAndRefreshToken } from '../../../Utils/GenerateAccessTokenAndRefreshToken.js';
+import { GenerateAccessTokenAndRefreshToken } from '../../../utils/GenerateAccessTokenAndRefreshToken.js';
 import { connection } from "../../../utils/connection.js";
-import { AccesstokenOption, RefreshtokenOption } from "../../../Utils/option.js";
+import { AccesstokenOption, RefreshtokenOption } from "../../../utils/option.js";
 import { makeQueue } from "../../../utils/makeQueue.js";
 import { Model } from "../../../models/index.js";
 
