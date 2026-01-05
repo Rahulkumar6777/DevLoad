@@ -54,6 +54,7 @@ jobs:
             docker run -d --name devloadbackend \
                 --restart always \
                 -p 127.0.0.1:6700:6700 \
+                --network vaani-net \
                 -e PORT="${{ secrets.PORT }}" \
                 -e MONGO_PRODUCTION_URI="${{ secrets.MONGO_PRODUCTION_URI }}" \
                 -e NODE_ENV="${{ secrets.NODE_ENV }}" \
