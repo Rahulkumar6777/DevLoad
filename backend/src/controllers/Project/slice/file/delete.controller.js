@@ -73,12 +73,11 @@ export const deleteFile = async (req, res) => {
                     {
                         $set: {
                             requestsUsed: { $add: ["$requestsUsed", 1] },
-                            storageUsed: {
-                                $max: [{ $subtract: ["$storageUsed", size] }, 0]
-                            }
+                            storageUsed: { $max: [{ $subtract: ["$storageUsed", size] }, 0] }
                         }
                     }
-                ]
+                ],
+                { updatePipeline: true }
             );
 
             await Model.Project.updateOne(
@@ -87,12 +86,11 @@ export const deleteFile = async (req, res) => {
                     {
                         $set: {
                             requestsUsed: { $add: ["$requestsUsed", 1] },
-                            storageUsed: {
-                                $max: [{ $subtract: ["$storageUsed", size] }, 0]
-                            }
+                            storageUsed: { $max: [{ $subtract: ["$storageUsed", size] }, 0] }
                         }
                     }
-                ]
+                ],
+                { updatePipeline: true }
             );
 
             await deleteFromMinio(`${project}/${filename}`, process.env.MAIN_BUCKET);
