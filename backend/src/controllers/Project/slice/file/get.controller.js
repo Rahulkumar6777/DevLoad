@@ -78,6 +78,12 @@ const PublicUrl = async (req, res) => {
         response.Body.pipe(res);
 
     } catch (error) {
+
+        
+        if (error.name === "NoSuchKey") {
+            return res.status(404).json({ message: "File not found" });
+        }
+
         console.error(error);
         res.status(500).json({
             message: "Error while serving file from storage",
