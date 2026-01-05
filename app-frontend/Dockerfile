@@ -3,6 +3,10 @@ FROM node:20.19.5 AS build
 
 WORKDIR /app
 
+ARG VITE_RAZORPAY_KEY_ID
+ENV VITE_RAZORPAY_KEY_ID=$VITE_RAZORPAY_KEY_ID
+
+
 COPY package*.json ./
 
 RUN npm ci
