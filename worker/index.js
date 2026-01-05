@@ -322,37 +322,23 @@ const cleanupFiles = async () => {
 const worker = new Worker(
   "devload-video-processing",
   async (job) => {
-    const {
-      projectId,
-      filename,
-      userFullname,
-      userEmailSendPreference,
-      userEmail,
-      url
-    } = job.data;
-
     try {
-
-      console.log(userEmailSendPreference)
-      await downloadVideo(url);
-
+      await downloadVideo(job.data.url);
       await convertToOptimizedMP4(inputFile, outputDir);
-
       await uploadFiles(
-        projectId,
-        filename,
+        job.data.projectId,
+        job.data.filename,
         process.env.ENDPOINT,
         process.env.ACCESS_ID,
         process.env.ACCESS_KEY,
-        userEmail,
-        userFullname,
-        userEmailSendPreference,
+        job.data.userEmail,
+        job.data.userFullname,
+        job.data.userEmailSendPreference,
       );
-
       console.log("Job Done");
     } catch (err) {
-      console.log('start sending mail')
-      await sendEmailToAdminOnFail(filename, err.message);
+      console.log('start sending mail');
+      await sendEmailToAdminOnFail(job.data.filename, err.message);
       console.error("Process Failed:", err);
       throw err;
     } finally {
@@ -361,7 +347,12 @@ const worker = new Worker(
   },
   {
     connection,
-    concurrency: 1
+    concurrency: 1,
+    settings: {
+      backoffStrategies: {
+        exponential: (attemptsMade) => Math.pow(2, attemptsMade) * 1000
+      }
+    }
   }
 );
 

@@ -19,7 +19,7 @@ const BootStrap = async (req, res) => {
 
         
         projectList = projects.map(project => ({
-            id: project.projectid,
+            id: project._id,
             name: project.projectname,
             description: project.description || 'No description',
         }));
@@ -86,10 +86,12 @@ const BootStrap = async (req, res) => {
             },
             profile: {
                 name: user.fullName,
-                createdAt: new Date(user.createdAt).toISOString(),
+                createdAt:  new Date(user?.createdAt).toISOString(),
             },
             projects: projectList,
         };
+
+        console.log(response)
 
         return res.status(200).json(response);
     } catch (error) {

@@ -13,6 +13,7 @@ import { GetAnalyticsData } from "./slice/GetData/GetAnalyticsData.js";
 import { GetProjectFullData } from "./slice/GetData/GetProjectFullData.js";
 import { GetProject } from "./slice/GetData/GetProjects.js";
 import { FileType } from "./slice/settings/FileType.js";
+import { processing } from "./slice/settings/processing.js";
 import { ProjectStorage } from "./slice/settings/ProjectStorage.js";
 import { RenameProject } from "./slice/settings/RenameProject.js";
 import { UpdateDescription } from "./slice/settings/UpdateDescription.js";
@@ -37,7 +38,8 @@ export const Project = {
         rename: RenameProject,
         updateDescription: UpdateDescription,
         ProjectStorage: ProjectStorage,
-        FileType: FileType
+        FileType: FileType,
+        processing: processing
     },
     domain: {
         addDomain: AddDomain,

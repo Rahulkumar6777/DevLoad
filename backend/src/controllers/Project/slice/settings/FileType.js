@@ -44,7 +44,7 @@ const FileType = async (req, res) => {
             : { $pull: { fileTypeAllowed: filetypeKey } };
 
         const updatedProject = await Model.Project.findOneAndUpdate(
-            { userid: user._id, projectid },
+            { userid: user._id, _id: projectid },
             update,
             { new: true }
         );
