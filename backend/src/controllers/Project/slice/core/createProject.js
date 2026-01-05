@@ -34,9 +34,9 @@ export const createProject = async (req, res) => {
         const userId = user._id;
 
         const fileTypeAllowedFree = ['image', "audio"]
-        const fileTypeAllowedPaid = ['image', "audio", "video", "document"]
+        const fileTypeAllowedPaid = ['image', "audio", "video"]
 
-        const maxfilesize = user.subscription === 'free' ? 40 : 1024
+        const maxfilesize = user.subscription === 'free' ? 52428800 : 1073741824
         const fileTypeAllowed = user.subscription === 'free' ? fileTypeAllowedFree : fileTypeAllowedPaid;
         const maxapikey = user.subscription === 'free' ? 1 : 5;
         const isOptimise = user.subscription === 'free' ? false : true
