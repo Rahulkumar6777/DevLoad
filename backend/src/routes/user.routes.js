@@ -70,5 +70,9 @@ router.delete("/project/:projectId/domain", verifyJWT, Project.domain.deleteDoma
 // paymnet
 router.post('/payment' , verifyJWT , Payment.init)
 router.post('/payment/verify' , verifyJWT , Payment.verify)
+router.get('/payment/renew/info' , verifyJWT , Payment.renewInfo)
+router.post('/payment/renew/init' , verifyJWT , Payment.initRenew)
+router.post('/payment/renew/verify' , verifyJWT , Payment.verifyRenew)
+
 
 export default router;
