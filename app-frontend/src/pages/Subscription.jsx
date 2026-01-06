@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   FiMail, FiCalendar, FiZap, FiPackage, FiDatabase, 
   FiKey, FiHeadphones, FiInfo, FiRefreshCw, FiArrowUpRight,
-  FiCreditCard, FiAlertCircle, FiCheckCircle
+  FiCreditCard, FiAlertCircle, FiCheckCircle, FiClock
 } from 'react-icons/fi';
 
 const Subscription = () => {
@@ -65,91 +65,105 @@ const Subscription = () => {
 
   if (!subscription) return null;
 
-  const { plan, email, features, renewsOn, isUnderRenew, downgradeInfo } = subscription;
+  const { plan, email, features, renewsOn, isUnderRenew, subscriptionEnd } = subscription;
   const isFree = plan === 'free';
 
   const handleRenew = () => {
     navigate('/renew');
   };
 
+  const handleUpgrade = () => {
+    navigate('/upgrade');
+  };
+
+  // Format subscription end date with time
+  const formatSubscriptionEndWithTime = () => {
+    if (!subscriptionEnd) return null;
+    
+    try {
+      const endDate = new Date(subscriptionEnd);
+      
+      // Get date in format: DD Month YYYY
+      const dateStr = endDate.toLocaleDateString('en-IN', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+      });
+      
+      // Get time in format: HH:MM AM/PM
+      const timeStr = endDate.toLocaleTimeString('en-IN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      
+      return {
+        date: dateStr,
+        time: timeStr,
+        fullDate: `${dateStr} at ${timeStr}`
+      };
+    } catch (error) {
+      return null;
+    }
+  };
+
+  // Calculate time remaining
+  const calculateTimeRemaining = () => {
+    if (!subscriptionEnd || isFree) return null;
+    
+    try {
+      const now = new Date();
+      const endDate = new Date(subscriptionEnd);
+      const diffMs = endDate - now;
+      
+      if (diffMs <= 0) return { days: 0, hours: 0, minutes: 0 };
+      
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      
+      return { days, hours, minutes };
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const subscriptionEndInfo = formatSubscriptionEndWithTime();
+  const timeRemaining = calculateTimeRemaining();
+
   const renderRenewBanner = () => {
     if (!isUnderRenew) return null;
 
-    const {
-      activeproject,
-      isactiveprojectmorethan1gb,
-      isactiveprojectmorethan1gbsize,
-      activeprojectfiledeleationdate,
-      isfrozenprojecthave,
-      frozenproject
-    } = downgradeInfo || {};
-
-    const hasFrozenProjects = isfrozenprojecthave === 'yes' && frozenproject > 0;
-    const hasFileDeletion = activeproject === 1 && isactiveprojectmorethan1gb === 'yes';
-
-    if (!hasFrozenProjects && !hasFileDeletion) return null;
-
-    const deletionDate = activeprojectfiledeleationdate 
-      ? new Date(activeprojectfiledeleationdate).toLocaleDateString(undefined, {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        })
-      : '';
-
     return (
-      <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/30 border-2 border-amber-600 rounded-xl p-4 sm:p-5 mb-6 space-y-3 animate-pulse-slow">
+      <div className="bg-gradient-to-br from-amber-900/40 to-yellow-900/30 border-2 border-amber-600 rounded-xl p-4 sm:p-5 mb-6 space-y-3">
         <div className="flex items-start gap-3">
           <div className="bg-amber-500/20 p-2 rounded-lg">
             <FiAlertCircle className="text-amber-300 text-xl flex-shrink-0" />
           </div>
           <div className="flex-1">
-            <p className="font-bold text-amber-100 text-lg mb-2">
-               Action Required
-            </p>
-            <p className="text-amber-200 text-sm mb-3">
-              {hasFrozenProjects && 'Renew now to restore frozen projects'}
-              {hasFrozenProjects && hasFileDeletion && ' and '}
-              {hasFileDeletion && 'prevent permanent file deletion'}
-            </p>
-            
-            <div className="space-y-2">
-              {hasFrozenProjects && (
-                <div className="flex items-start gap-2 p-3 bg-amber-900/30 rounded-lg border border-amber-700/50">
-                  <span className="text-2xl">🧊</span>
-                  <div>
-                    <p className="text-amber-100 font-semibold text-sm">
-                      {frozenproject} Frozen Project{frozenproject > 1 ? 's' : ''}
-                    </p>
-                    <p className="text-amber-200 text-xs">
-                      Will be permanently deleted in 28 days
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {hasFileDeletion && (
-                <div className="flex items-start gap-2 p-3 bg-red-900/30 rounded-lg border border-red-700/50">
-                  <span className="text-2xl">📁</span>
-                  <div>
-                    <p className="text-red-100 font-semibold text-sm">
-                      {isactiveprojectmorethan1gbsize} MB Scheduled for Deletion
-                    </p>
-                    <p className="text-red-200 text-xs">
-                      Deletion date: {deletionDate}
-                    </p>
-                  </div>
-                </div>
-              )}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div>
+                <p className="font-bold text-amber-100 text-lg mb-2">
+                  Your Subscription is About to Expire!
+                </p>
+                <p className="text-amber-200 text-sm mb-3">
+                  Your subscription will end on <span className="font-bold">{subscriptionEndInfo?.fullDate}</span>
+                  {timeRemaining && (
+                    <span className="ml-2">
+                      ({timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m remaining)
+                    </span>
+                  )}
+                </p>
+              </div>
+              
+              <button
+                onClick={handleRenew}
+                className="flex-shrink-0 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all shadow-lg flex items-center justify-center gap-2"
+              >
+                <FiRefreshCw className="text-lg" />
+                Renew Now
+              </button>
             </div>
-
-            <button
-              onClick={handleRenew}
-              className="mt-4 w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all shadow-lg flex items-center justify-center gap-2"
-            >
-              <FiRefreshCw className="text-lg" />
-              Renew Now to Restore
-            </button>
           </div>
         </div>
       </div>
@@ -185,16 +199,47 @@ const Subscription = () => {
                 <p className="text-gray-400 mt-1 text-xs sm:text-sm">Manage your billing and plan settings</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span
-                className={`px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide text-center ${
-                  isFree 
-                    ? 'bg-gray-700 text-gray-300' 
-                    : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/50'
-                }`}
-              >
-                {plan}
-              </span>
+            
+            {/* Plan badge and subscription end info */}
+            <div className="flex flex-col items-end gap-2">
+              <div className="flex items-center gap-3">
+                {!isFree && subscriptionEndInfo && (
+                  <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-indigo-900/30 border border-indigo-700/50 rounded-lg">
+                    <FiClock className="text-indigo-400 text-sm" />
+                    <div className="text-right">
+                      <p className="text-indigo-300 text-xs font-medium">Expires</p>
+                      <p className="text-white text-xs">
+                        {subscriptionEndInfo.date}
+                        <span className="text-gray-400 ml-1">at</span>
+                        <span className="ml-1 font-medium">{subscriptionEndInfo.time}</span>
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                <span
+                  className={`px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide text-center ${
+                    isFree 
+                      ? 'bg-gray-700 text-gray-300' 
+                      : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/50'
+                  }`}
+                >
+                  {plan}
+                </span>
+              </div>
+              
+              {/* Mobile view for subscription end */}
+              {!isFree && subscriptionEndInfo && (
+                <div className="sm:hidden flex items-center gap-2 px-3 py-1.5 bg-indigo-900/30 border border-indigo-700/50 rounded-lg w-full justify-center">
+                  <FiClock className="text-indigo-400 text-sm" />
+                  <div className="text-center">
+                    <p className="text-indigo-300 text-xs font-medium">Expires</p>
+                    <p className="text-white text-xs">
+                      {subscriptionEndInfo.date} at {subscriptionEndInfo.time}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -245,20 +290,21 @@ const Subscription = () => {
                 </div>
               </div>
 
-              {!isFree && renewsOn && (
+              {!isFree && subscriptionEndInfo && (
                 <div className="flex items-start gap-4">
                   <div className="bg-indigo-900/30 p-2.5 rounded-lg">
                     <FiCalendar className="text-indigo-400 text-xl" />
                   </div>
                   <div>
-                    <p className="text-gray-400 text-sm mb-1">Expires On</p>
+                    <p className="text-gray-400 text-sm mb-1">Subscription Ends</p>
                     <p className="text-white font-semibold text-base">
-                      {new Date(renewsOn).toLocaleDateString(undefined, {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
+                      {subscriptionEndInfo.fullDate}
                     </p>
+                    {timeRemaining && !isUnderRenew && (
+                      <p className="text-green-400 text-sm mt-1">
+                        {timeRemaining.days}d {timeRemaining.hours}h {timeRemaining.minutes}m remaining
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
@@ -268,7 +314,7 @@ const Subscription = () => {
             <div className="mt-6 flex flex-wrap gap-3">
               {isFree && !isUnderRenew && (
                 <button
-                  onClick={() => navigate('/upgrade')}
+                  onClick={handleUpgrade}
                   className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-indigo-500/50"
                 >
                   <FiArrowUpRight className="text-lg" />
@@ -276,21 +322,21 @@ const Subscription = () => {
                 </button>
               )}
 
-              {isFree && isUnderRenew && (
-                <button
-                  onClick={handleRenew}
-                  className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg transition-all shadow-lg"
-                >
-                  <FiRefreshCw className="text-lg" />
-                  Renew Subscription
-                </button>
-              )}
-
-              {!isFree && (
+              {!isFree && !isUnderRenew && (
                 <div className="flex items-center gap-2 px-4 py-2 bg-green-900/20 border border-green-700/50 rounded-lg text-green-400">
                   <FiCheckCircle />
                   <span className="text-sm font-medium">Active Subscription</span>
                 </div>
+              )}
+              
+              {!isFree && (
+                <button
+                  onClick={handleRenew}
+                  className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all shadow-lg hover:shadow-indigo-500/50"
+                >
+                  <FiRefreshCw className="text-lg" />
+                  Renew Early
+                </button>
               )}
             </div>
           </div>
@@ -382,16 +428,6 @@ const Subscription = () => {
           )}
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes pulse-slow {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.8; }
-        }
-        .animate-pulse-slow {
-          animation: pulse-slow 2s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 };
