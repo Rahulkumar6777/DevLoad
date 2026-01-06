@@ -1,6 +1,8 @@
 import Razorpay from 'razorpay'
 import * as crypto from 'crypto'
 import { Model } from '../../../models/index.js';
+import { makeQueue } from "../../../utils/makeQueue.js"
+import { delay } from 'bullmq';
 
 
 const paymentVerify = async (req, res) => {
@@ -50,10 +52,10 @@ const paymentVerify = async (req, res) => {
 
 
             const now = new Date();
-            const subscriptionend = new Date(now.getTime() + months * 30 * 24 * 60 * 60 * 1000);  // here later i send this on worker queue so it handle expiry
-            const isBeforeExpiryDate = new Date(now.getTime() + months * 25 * 24 * 60 * 60 * 1000) // here i notify user to renew service
+            const subscriptionend = process.env.NODE_ENV === "production" ? new Date(now.getTime() + months * 30 * 24 * 60 * 60 * 1000) : new Date(now.getTime() + 60 * 60 * 1000)  // here later i send this on worker queue so it handle expiry
+            const isBeforeExpiryDate = process.env.NODE_ENV === "production" ? new Date(now.getTime() + months * 25 * 24 * 60 * 60 * 1000) : new Date(now.getTime() + 2 * 60 * 1000)
 
-            // Update user subscription details
+
 
             console.log("User found:", user.fullname);
 
@@ -82,16 +84,28 @@ const paymentVerify = async (req, res) => {
 
             user.save({ validateBeforeSave: false })
 
-            function getUserInitials(fullname) {
-                return fullname.split(' ')
-                    .map(name => name[0].toUpperCase())
-                    .join('');
-            }
-
             orderfromdb.status = 'completed'
             await orderfromdb.save({ validateBeforeSave: false })
 
 
+            await Model.CompletedOrder.create({
+                userid: orderfromdb.userid,
+                oderid: orderfromdb.oderid,
+                months: orderfromdb.months,
+                amount: orderfromdb.finalAmount,
+                status: 'completed'
+            })
+
+            const isBeforeExpiryNotify = makeQueue("isBeforeExpiryQueue")
+            await isBeforeExpiryNotify.add("isBeforeExpiryQueue",
+                {
+                    userId: req.user._id
+                }, {
+                delay: isBeforeExpiryDate - Date.now(),
+                jobId: req.user._id.toString(),
+                removeOnComplete: true
+            }
+            )
 
 
             return res.json({ success: true, userSubscribe: user.subscription, message: "Payment verified successfully!" });
