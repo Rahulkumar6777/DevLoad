@@ -46,7 +46,7 @@ const initRegistration = async (req, res) => {
         const checkDeletedUSer = await Model.DeleteUserAccountModel.findOne({ email: email });
         if (checkDeletedUSer) {
             return res.status(423).json({
-                message: "Account Deleted with this email, you can't create a new account for 30 days after deletion",
+                message: "This account has been deleted. You cannot create a new account with this email for 30 days after deletion.",
             });
         }
 
