@@ -44,11 +44,6 @@ const plans = [
         available: true,
         highlight: true,
       },
-      {
-        icon: <Check className="w-5 h-5" />,
-        text: "Public URL Caching",
-        available: true,
-      },
     ],
     buttonText: "Get Started",
     buttonStyle: "bg-white/10 hover:bg-white/20 border-white/20",
@@ -57,7 +52,7 @@ const plans = [
   },
   {
     name: "Pro Plan",
-    price: "₹499",
+    price: "₹299",
     period: "per month",
     description: "For serious developers and small teams",
     features: [
@@ -73,7 +68,7 @@ const plans = [
       },
       {
         icon: <Key className="w-5 h-5" />,
-        text: "2 API Keys per Project",
+        text: "5 API Keys per Project",
         available: true,
       },
       {
