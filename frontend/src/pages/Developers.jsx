@@ -21,7 +21,7 @@ const developers = [
     ],
     social: {
       linkedin: "https://www.linkedin.com/in/rahul-kumar-003aa2316",
-      portfolio: "#",
+      portfolio: "https://rahul.cloudcoderhub.in",
     },
     gradient: "from-blue-500 to-cyan-500",
   },
@@ -57,6 +57,7 @@ const techStack = [
   { name: "BullMQ", color: "text-orange-400" },
   { name: "FFmpeg", color: "text-yellow-400" },
   { name: "Nginx", color: "text-blue-400" },
+  { name: "s3", color: "text-blue-400" },
 ];
 
 export default function DevelopersSection() {
