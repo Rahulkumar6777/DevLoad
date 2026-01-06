@@ -8,7 +8,7 @@ import { fetchSubscription } from "../store/slices/subscriptionSlice";
 import { fetchBootstrapData } from "../store/slices/bootstrapSlice";
 import { useSelector } from 'react-redux';
 
-const PaymentGateway = ({ amount, description, months }) => {
+const RenewPaymentGateway = ({ amount, description, months }) => {
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
@@ -41,12 +41,8 @@ const PaymentGateway = ({ amount, description, months }) => {
     try {
       setIsProcessing(true);
 
-      const { data: orderData } = await makeAuthenticatedRequest(`${BaseUrl}/payment`, {
+      const { data: orderData } = await makeAuthenticatedRequest(`${BaseUrl}/payment/renew/init`, {
         method: 'POST',
-        data: {
-          amount: amount,
-          months: months
-        }
       });
 
       const options = {
@@ -58,7 +54,7 @@ const PaymentGateway = ({ amount, description, months }) => {
         order_id: orderData.id,
         handler: async function (response) {
           try {
-            const { data: verifyResponse } = await makeAuthenticatedRequest(`${BaseUrl}/payment/verify`, {
+            const { data: verifyResponse } = await makeAuthenticatedRequest(`${BaseUrl}/payment/renew/verify`, {
               method: 'POST',
               data: {
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -124,4 +120,4 @@ const PaymentGateway = ({ amount, description, months }) => {
   );
 };
 
-export default PaymentGateway;
+export default RenewPaymentGateway;
