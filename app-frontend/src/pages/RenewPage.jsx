@@ -144,7 +144,7 @@ const Renew = () => {
                   <div className="flex justify-between items-center">
                     <span className="text-gray-400">Price:</span>
                     <div className="flex items-end">
-                      <span className="text-2xl font-bold text-white">₹499</span>
+                      <span className="text-2xl font-bold text-white">₹299</span>
                       <span className="text-gray-400 ml-1">/month</span>
                     </div>
                   </div>

@@ -24,7 +24,6 @@ const UpgradePage = () => {
         { icon: <FaKey className="text-blue-400" />, text: "1 API Key per Project", highlight: false },
         { icon: <FaServer className="text-blue-400" />, text: "10GB Bandwidth", highlight: false },
         { icon: <FaBolt className="text-yellow-400" />, text: "1500 Requests", highlight: true },
-        { icon: <FaInfinity className="text-blue-400" />, text: "Caching on Public URLs", highlight: false }
       ],
       buttonText: "Get Started",
       buttonColor: "from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700",
@@ -36,7 +35,7 @@ const UpgradePage = () => {
     {
       id: "pro",
       name: "Member Plan",
-      price: "₹499 / month",
+      price: "₹299 / month",
       features: [
         { icon: <FaProjectDiagram className="text-blue-400" />, text: "5 Projects", highlight: false },
         { icon: <FaDatabase className="text-blue-400" />, text: "5120MB Storage", highlight: false },
@@ -73,7 +72,7 @@ const UpgradePage = () => {
   };
 
   const currentPrice = calculatePrice(selectedMonths);
-  const savings = (499 * selectedMonths) - currentPrice;
+  const savings = (299 * selectedMonths) - currentPrice;
 
   const handlePlanSelect = (plan) => {
     if (plan.id === "free") {
@@ -135,13 +134,13 @@ const UpgradePage = () => {
                   </div>
                 </div>
                 <div className="text-gray-400 text-sm mt-3">
-                  <span className="line-through">₹{(499 * selectedMonths).toFixed(2)}</span>
+                  <span className="line-through">₹{(299 * selectedMonths).toFixed(2)}</span>
                   <span> (₹{(currentPrice / selectedMonths).toFixed(2)}/month)</span>
                 </div>
               </div>
 
               <p className="text-gray-400 text-sm mb-4">
-                Renews at ₹499/month after {selectedMonths} months.
+                Renews at ₹299/month after {selectedMonths} months.
               </p>
 
               <div className="bg-gradient-to-r from-green-900/20 to-emerald-900/20 border border-green-800/30 rounded-lg p-4 mb-4">
@@ -175,7 +174,7 @@ const UpgradePage = () => {
                 <div className="flex justify-between items-center pb-3 border-b border-gray-700">
                   <span className="text-gray-300">{selectedMonths} months plan</span>
                   <div className="text-right">
-                    <div className="text-gray-400 text-sm line-through">₹{(499 * selectedMonths).toFixed(2)}</div>
+                    <div className="text-gray-400 text-sm line-through">₹{(299 * selectedMonths).toFixed(2)}</div>
                     <div className="text-white font-medium">₹{currentPrice.toFixed(2)}</div>
                   </div>
                 </div>
