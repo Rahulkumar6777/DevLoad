@@ -14,7 +14,7 @@ import packageRoutes from './src/routes/package.routes.js'
 // routes here
 app.use('/public' ,cors(corsPublic), publicUrlRoutes )
 app.use('/api/v2/user' , cors(corsFrontend) , monitoringMiddleware  , userRoutes)
-app.use('/api/v2/devload' , cors(packageCors) , packageRoutes)
+app.use('/api/v1/devload' , cors(packageCors) , packageRoutes)
 
 
 // worker
