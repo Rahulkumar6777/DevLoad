@@ -2,7 +2,7 @@ import { Model } from "../../../models/index.js";
 
 const BootStrap = async (req, res) => {
     try {
-        
+
         if (!req.user || !req.user._id) {
             return res.status(401).json({ message: 'Unauthorized: User not found' });
         }
@@ -11,20 +11,20 @@ const BootStrap = async (req, res) => {
 
         let projectList = [];
 
-        
+
         const projects = await Model.Project.find({ userid: user._id, isActive: 'active' }).lean();
         if (projects.length === 0) {
             projectList = []
         }
 
-        
+
         projectList = projects.map(project => ({
             id: project._id,
             name: project.projectname,
             description: project.description || 'No description',
         }));
 
-        
+
         const planConfigs = {
             free: {
                 apiKeySupport: '1 key per project',
@@ -39,35 +39,10 @@ const BootStrap = async (req, res) => {
             },
         };
 
-        let downgradeInfo = {
-        }
-
-        if (user.isUnderRenew) {
-            const info = await Model.RenewSubscription.findOne({ userid: user._id });
-
-            if (info) {
-
-                if(info.activeproject > 0){
-                    downgradeInfo.activeproject  = 1
-                }
-                if (info.isactiveprojectmorethan1gb === 'yes') {
-                    downgradeInfo.isactiveprojectmorethan1gb = 'yes';
-                    downgradeInfo.isactiveprojectmorethan1gbsize = info.isactiveprojectmorethan1gbsize;
-                    downgradeInfo.datadeletationdate = info.activeprojectfiledeleationdate;
-                }
-
-                if (info.isfrozenprojecthave === 'yes') {
-                    downgradeInfo.isfrozenprojecthave = 'yes';
-                    downgradeInfo.frozenproject = info.frozenproject;
-                }
-            }
-        }
-
         const plan = planConfigs[user.subscription] ? user.subscription : 'free';
 
-        console.log(downgradeInfo)
 
-       
+
         const response = {
             subscription: {
                 plan: user.subscription,
@@ -81,17 +56,15 @@ const BootStrap = async (req, res) => {
                     support: planConfigs[plan].support
                 },
                 isUnderRenew: user?.isUnderRenew,
-                isproject : user.isUnderRenew ? 'yes' : 'no',
-                downgradeInfo: downgradeInfo
+                subscriptionEnd: user?.subscriptionEnd
             },
             profile: {
                 name: user.fullName,
-                createdAt:  new Date(user?.createdAt).toISOString(),
+                createdAt: new Date(user?.createdAt).toISOString(),
             },
             projects: projectList,
         };
 
-        console.log(response)
 
         return res.status(200).json(response);
     } catch (error) {
