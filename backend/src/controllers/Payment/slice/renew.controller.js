@@ -10,7 +10,7 @@ const razorpay = new Razorpay({
 
 export const RenewPayment = async (req, res) => {
 
-    const order = await Model.CompletedOrder.findOne({userid: req.user._id})
+    const order = await Model.CompletedOrder.findOne({oderid: req.user.subscriptionId})
 
     const months = order.months
 

@@ -33,8 +33,11 @@ const Subscription = async (req, res) => {
                 "support": "Priority Email Support",
             },
         }
+
+        const subscriptionEnd = user?.subscriptionEnd
         return res.status(200).json(
-            proplan
+            proplan,
+            subscriptionEnd
         )
     } catch (error) {
         return res.status(500).json({

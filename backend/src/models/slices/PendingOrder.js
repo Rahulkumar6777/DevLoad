@@ -23,6 +23,7 @@ const pendingorderschema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
+        expires: 7200,
         default: Date.now
     }
 })
