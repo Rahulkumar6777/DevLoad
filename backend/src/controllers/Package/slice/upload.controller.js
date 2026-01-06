@@ -207,7 +207,7 @@ export const uplaodFile = async (req, res) => {
 
         const deleteUrl = `${protocol}://${req.get(
             "host"
-        )}/api/v1/devload/file/${req.file.filename}`;
+        )}/api/v2/devload/file/${req.file.filename}`;
 
         const fDeleteUr = `${protocol}://${req.get(
             "host"

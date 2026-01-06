@@ -1,6 +1,6 @@
 export const packageCors = {
     origin: '*',
-    methods: ['POST', 'GET', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['POST', 'DELETE'],
     credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization' , 'x-api-key'],
 }
