@@ -28,14 +28,20 @@ const verifyApiKey = async (req, res, next) => {
         }
 
         const user = apimatch.userid;
-        console.log(user)
+
+
+        if (user.status === 'deleted') {
+            return res.status(403).json({
+                message: "Your Account is sheduled for deletation"
+            })
+        }
 
         if (user.status === 'banned') {
             return res.status(403).json({
                 message: "Your Account temporarly Banned and unBanned on "
             })
         }
-        
+
 
         const projectfind = await Model.Project.findById(projectid)
         if (!projectfind) {
@@ -49,7 +55,7 @@ const verifyApiKey = async (req, res, next) => {
             return res.status(500).json({
                 message: "Project not active"
             })
-        }  
+        }
 
         req.project = projectfind;
         req.user = user;
