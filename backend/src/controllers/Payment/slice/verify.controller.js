@@ -5,6 +5,8 @@ import { makeQueue } from "../../../utils/makeQueue.js"
 import { delay } from 'bullmq';
 
 
+const subscriptionExpire = makeQueue("subscriptionend")
+
 const paymentVerify = async (req, res) => {
 
     const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
@@ -107,6 +109,15 @@ const paymentVerify = async (req, res) => {
             }
             )
 
+            
+            await subscriptionExpire.add("subscriptionend",
+                {
+                    userId: req.user._id
+                }, {
+                jobId: req.user._id.toString(),
+                delay: subscriptionend - Date.now()
+            }
+            )
 
             return res.json({ success: true, userSubscribe: user.subscription, message: "Payment verified successfully!" });
         } else {
@@ -119,4 +130,4 @@ const paymentVerify = async (req, res) => {
 
 }
 
-export { paymentVerify }
+export { paymentVerify , subscriptionExpire}

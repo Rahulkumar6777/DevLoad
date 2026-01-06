@@ -47,7 +47,7 @@ router.put("/email", verifyJWT, updateUserDetails.email)
 router.put("/fullname", verifyJWT, updateUserDetails.updatefullname)
 router.get('/subscription', verifyJWT, updateUserDetails.subsription)
 router.get('/bootstrap', verifyJWT, updateUserDetails.BootStrap)
-router.delete('delete', verifyJWT, updateUserDetails.delete)
+router.delete('/delete', verifyJWT, updateUserDetails.delete)
 
 
 // Project API keys

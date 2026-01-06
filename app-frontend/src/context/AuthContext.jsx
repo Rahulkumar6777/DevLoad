@@ -167,7 +167,7 @@ export const AuthProvider = ({ children }) => {
   const accountdelete = async () => {
     let token = accessToken;
     try {
-      await axios.delete(`${BaseUrl}delete`, {
+      await axios.delete(`${BaseUrl}/delete`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

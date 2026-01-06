@@ -3,7 +3,7 @@ import { makeQueue } from "../../../utils/makeQueue.js";
 
 const accountDelete = async (req, res) => {
     try {
-        const user = req.user._id;
+        const user = req.user;
 
         user.status = "deleted"
 
@@ -13,7 +13,7 @@ const accountDelete = async (req, res) => {
         const tempCleanupAt = process.env.NODE_ENV === 'production' ? Date.now() + 1 * 60 * 60 * 1000 : Date.now() + 2 * 60 * 1000
         await accountDeletequeue.add("accountdelete",
             {
-                useId: user._id
+                userId: user._id
             },
             {
                 delay: tempCleanupAt - Date.now(),
@@ -27,6 +27,7 @@ const accountDelete = async (req, res) => {
             message: "Account Sheduled for deletation"
         })
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             error: "Internal server Error"
         })

@@ -11,10 +11,6 @@ const DeleteUserAccount = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    noNewCreate: {
-        type: Boolean,
-        default: false,  
-    },
     createdAt: {
         type: Date,
         expires: 2592000, 

@@ -29,6 +29,12 @@ const RefreshToken = async (req ,res) => {
             })
         }
 
+        if(user.status === 'deleted'){
+            return res.status(403).json({
+                message: "Your Account is deleted"
+            })
+        }
+
         if(user.status === 'banned'){
             return res.status(403).json({
                 message: "Your Account is Blocked"

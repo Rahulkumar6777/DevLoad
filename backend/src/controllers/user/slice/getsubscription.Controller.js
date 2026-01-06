@@ -31,13 +31,14 @@ const Subscription = async (req, res) => {
                 "storageMB": user.maxStorage,
                 "apiKeySupport": "5 key per Project! by Default comes with 1 key!",
                 "support": "Priority Email Support",
+                "subscriptionEnd": user?.subscriptionEnd
             },
         }
 
-        const subscriptionEnd = user?.subscriptionEnd
+        
         return res.status(200).json(
             proplan,
-            subscriptionEnd
+            
         )
     } catch (error) {
         return res.status(500).json({

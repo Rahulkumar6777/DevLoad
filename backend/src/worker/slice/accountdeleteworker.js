@@ -7,38 +7,48 @@ const worker = new Worker("accountdelete", async (job) => {
     try {
         const { userId } = job.data;
 
-        const isProject = await Model.Project.find({userid: userId});
+        const isProject = await Model.Project.find({ userid: userId });
         if (isProject.length > 0) {
 
-            const isApiKey = await Model.Apikey.find({ projectid: projectId });
-            if (isApiKey.length > 0) {
-                await Model.Apikey.deleteMany({ projectid: projectId })
-            }
-
-            const files = await Model.File.find({ projectid: projectId })
-            if (files.length > 0) {
-                for (const file of files) {
-
-                    const filename = file.filename;
-                    const bucket = file.serveFrom
-
-                    await deleteFromMinio(`${projectId}/${filename}`, bucket === "main" ? process.env.MAIN_BUCKET : process.env.TEMP_BUCKET)
-                    await Model.File.findByIdAndDelete(file._id)
+            for (const project of isProject) {
+                const isApiKey = await Model.Apikey.find({ projectid: project._id });
+                if (isApiKey.length > 0) {
+                    await Model.Apikey.deleteMany({ projectid: project._id })
                 }
-            }
 
-            const isDomain = await Model.Domain.findOne({ projectid: projectId });
-            if (isDomain) {
-                await Model.Domain.deleteOne({ projectid: projectId })
-            }
+                const files = await Model.File.find({ projectid: project._id })
+                if (files.length > 0) {
+                    for (const file of files) {
 
-            await Model.Project.findByIdAndDelete(projectId);
+                        const filename = file.filename;
+                        const bucket = file.serveFrom
+
+                        await deleteFromMinio(`${project._id}/${filename}`, bucket === "main" ? process.env.MAIN_BUCKET : process.env.TEMP_BUCKET)
+                        await Model.File.findByIdAndDelete(file._id)
+                    }
+                }
+
+                const isDomain = await Model.Domain.findOne({ projectid: project._id });
+                if (isDomain) {
+                    await Model.Domain.deleteOne({ projectid: project._id })
+                }
+
+                await Model.Project.findByIdAndDelete(project._id);
+            }
 
         }
+
+        const user = await Model.User.findById(userId)
+        await Model.DeleteUserAccountModel.create({
+            userId: userId,
+            email: user?.email
+        })
+
+        await Model.User.findByIdAndDelete(userId)
     } catch (error) {
         throw error
     }
-}, { connection})
+}, { connection })
 
 worker.on("completed", async (job) => {
     console.log("all data Deleated of user", job.data.userId)

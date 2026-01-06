@@ -16,6 +16,12 @@ const verifyJWT = async (req, res, next) => {
             return res.status(403).json({ message: "Invalid User" });
         }
 
+        if (user.status === 'deleted') {
+            return res.status(403).json({
+                message: "Your Account is sheduled for deletation"
+            })
+        }
+
         if (user.status === 'banned') {
             return res.status(403).json({
                 message: "Your Account temporarly Banned"

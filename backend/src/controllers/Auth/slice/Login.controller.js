@@ -43,6 +43,12 @@ const Login = async (req, res) => {
             });
         }
 
+        if(user.status === 'deleted'){
+            return res.status(403).json({
+                message: "Your Account is deleted"
+            })
+        }
+
         if (user.status === 'banned') {
 
             const formattedDateTime = user.suspensionEnd?.toLocaleString('en-IN', {

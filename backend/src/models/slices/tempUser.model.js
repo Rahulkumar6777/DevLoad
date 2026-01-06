@@ -6,7 +6,7 @@ const tempuserschema = new mongoose.Schema({
         required: true,
     },
     email: {
-       type: String,
+        type: String,
         required: true,
         required: true,
         trim: true,
@@ -14,7 +14,12 @@ const tempuserschema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
+    },
+    createdAt: {
+        type: Date,
+        expires: 600,
+        default: Date.now
     }
 })
 
-export const TempUser = mongoose.model('TempUser' , tempuserschema)
+export const TempUser = mongoose.model('TempUser', tempuserschema)

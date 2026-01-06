@@ -1,7 +1,7 @@
 import * as crypto from 'crypto'
 import { Model } from '../../../models/index.js';
 import { makeQueue } from '../../../utils/makeQueue.js';
-
+import { subscriptionExpire } from './verify.controller.js';
 
 const verifyRenew = async (req, res) => {
 
@@ -78,6 +78,12 @@ const verifyRenew = async (req, res) => {
                 removeOnComplete: true
             }
             )
+
+            const job = await subscriptionExpire.getJob(req.user._id.toString());
+            if (job) {
+                await job.remove();
+                console.log("job removed")
+            }
 
             return res.json({ success: true, userSubscribe: user.subscription, message: "Payment verified successfully!" });
         } else {
