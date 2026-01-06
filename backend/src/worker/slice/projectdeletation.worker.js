@@ -11,7 +11,7 @@ const worker = new Worker("projectDeleteQueue", async (job) => {
         const isProject = await Model.Project.findById(projectId);
         if (isProject) {
 
-            isApiKey = await Model.Apikey.find({ projectid: projectId });
+            const isApiKey = await Model.Apikey.find({ projectid: projectId });
             if (isApiKey.length > 0) {
                 await Model.Apikey.deleteMany({ projectid: projectId })
             }
@@ -23,12 +23,12 @@ const worker = new Worker("projectDeleteQueue", async (job) => {
                     const filename = file.filename;
                     const bucket = file.serveFrom
 
-                    await deleteFromMinio(`${projectId}/${filename}`, bucket === "main" ? process.env.MAIN_BUCKET : process.env.TEMPBUCKET)
+                    await deleteFromMinio(`${projectId}/${filename}`, bucket === "main" ? process.env.MAIN_BUCKET : process.env.TEMP_BUCKET)
                     await Model.File.findByIdAndDelete(file._id)
                 }
             }
 
-            const isDomain = await Model.Domain.find({ projectid: projectId });
+            const isDomain = await Model.Domain.findOne({ projectid: projectId });
             if (isDomain) {
                 await Model.Domain.deleteOne({ projectid: projectId })
             }

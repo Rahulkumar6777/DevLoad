@@ -2,7 +2,7 @@ import { Model } from "../../../../models/index.js"
 import { makeQueue } from "../../../../utils/makeQueue.js";
 
 
-const projectDeleteQueue = makeQueue('projectDeleteQueue');
+const projectDeleteworker = makeQueue('projectDeleteQueue');
 
 
 export const deleteProject = async (req, res) => {
@@ -39,7 +39,7 @@ export const deleteProject = async (req, res) => {
 
         const tempCleanupAt = process.env.NODE_ENV === 'production' ? Date.now() + 1 * 60 * 60 * 1000 : Date.now() + 3 * 60 * 1000
 
-        await projectDeleteQueue.add(
+        await projectDeleteworker.add(
             "projectDeleteQueue",
             {
                 projectId: projectid,
