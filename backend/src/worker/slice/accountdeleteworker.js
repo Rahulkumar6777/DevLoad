@@ -1,6 +1,7 @@
 import { Worker } from "bullmq";
 import { Model } from "../../models/index.js"
 import { connection } from "../../utils/connection.js";
+import { deleteFromMinio} from "../../utils/deleteFileFromMinio.js"
 
 
 const worker = new Worker("accountdelete", async (job) => {
