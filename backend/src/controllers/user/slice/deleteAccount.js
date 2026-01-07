@@ -10,7 +10,7 @@ const accountDelete = async (req, res) => {
         await user.save({ validateBeforeSave: false })
 
         const accountDeletequeue = makeQueue('accountdelete');
-        const tempCleanupAt = process.env.NODE_ENV === 'production' ? Date.now() + 1 * 60 * 60 * 1000 : Date.now() + 2 * 60 * 1000
+        const tempCleanupAt = process.env.NODE_ENV === 'production' ? Date.now() + 60 * 60 * 1000 : Date.now() + 2 * 60 * 1000
         await accountDeletequeue.add("accountdelete",
             {
                 userId: user._id

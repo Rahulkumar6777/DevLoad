@@ -46,6 +46,7 @@ const worker = new Worker("accountdelete", async (job) => {
 
         await Model.User.findByIdAndDelete(userId)
     } catch (error) {
+        console.log(error)
         throw error
     }
 }, { connection })
