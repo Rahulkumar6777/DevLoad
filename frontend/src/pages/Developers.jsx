@@ -8,7 +8,7 @@ const developers = [
     description:
       "Architected the complete backend infrastructure with Node.js, MongoDB, and BullMQ for queue management. Implemented secure authentication, API design, and handled deployment with Nginx. Integrated Redux for state management and FFmpeg for media processing.",
     image:
-      "https://api-devload.cloudcoderhub.in/public/695f91881242b7ee566ffeea/1767871280834a953f61ef417662ec5c889e3.jpeg",
+      "https://api-devload.cloudcoderhub.in/public/695f91881242b7ee566ffeea/176787154576659db7e7e05eb043d7fee2d91.jpeg",
     skills: [
       "Node.js",
       "MongoDB",
