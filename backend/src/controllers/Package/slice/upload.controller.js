@@ -222,7 +222,7 @@ export const uplaodFile = async (req, res) => {
             type: fileType,
             filename: req.file.filename,
             size: filesize,
-            publicurl: publicUrl,
+            publicUrl,
             downloadeUrl,
             fDeleteUr,
             deleteUrl,
@@ -271,9 +271,9 @@ export const uplaodFile = async (req, res) => {
             filename: newfile.originalfilename,
             filesize: `${(filesize / (1024 * 1024)).toFixed(2)} Mb`,
             filetype: newfile.type,
-            publicUrl,
+            publicurl: publicUrl,
             downloadeUrl,
-            deleteUrl: deleteUrl,
+            deleteurl: deleteUrl,
         });
     } catch (error) {
         console.log(error);
