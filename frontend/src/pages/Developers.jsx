@@ -8,7 +8,7 @@ const developers = [
     description:
       "Architected the complete backend infrastructure with Node.js, MongoDB, and BullMQ for queue management. Implemented secure authentication, API design, and handled deployment with Nginx. Integrated Redux for state management and FFmpeg for media processing.",
     image:
-      "https://api-devload.cloudcoderhub.in/public/64b2d2fe454e0f128767e54bca28b02c/1766838252547ff6da4d91af5c5d9093018f2e6d36b5f.jpeg",
+      "https://api-devload.cloudcoderhub.in/public/695f91881242b7ee566ffeea/1767871280834a953f61ef417662ec5c889e3.jpeg",
     skills: [
       "Node.js",
       "MongoDB",
@@ -31,7 +31,7 @@ const developers = [
     description:
       "Designed and developed the modern, responsive landing page using React.js and Vite. Created smooth animations with Framer Motion and crafted the entire UI/UX with Tailwind CSS. Focused on mobile-first design and optimal user experience.",
     image:
-      "https://api-devload.cloudcoderhub.in/public/1751661454306d296db2a288443f93fe23342b20e5662.jpg",
+      "https://api-devload.cloudcoderhub.in/public/695f91881242b7ee566ffeea/1767871338623ee777f141cb4eae1f06ddfc2.png",
     skills: [
       "React.js",
       "Vite",
