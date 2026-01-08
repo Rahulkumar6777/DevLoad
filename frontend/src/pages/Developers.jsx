@@ -41,7 +41,7 @@ const developers = [
     ],
     social: {
       linkedin: "https://www.linkedin.com/in/junaidqamar12",
-      portfolio: "#",
+      portfolio: "https://junaidportfolio1.netlify.app/",
     },
     gradient: "from-purple-500 to-pink-500",
   },
