@@ -222,7 +222,7 @@ export const uplaodFile = async (req, res) => {
             type: fileType,
             filename: req.file.filename,
             size: filesize,
-            publicUrl,
+            publicurl: publicUrl,
             downloadeUrl,
             fDeleteUr,
             deleteUrl,
