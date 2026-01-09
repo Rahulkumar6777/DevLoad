@@ -9,9 +9,9 @@ import { configDotenv } from "dotenv";
 configDotenv();
 
 
-// run container befroe server start
-import { runcontainer } from "./src/scripts/index.js";
-await runcontainer()
+// // run container befroe server start
+// import { runcontainer } from "./src/scripts/index.js";
+// await runcontainer()
 
 
 //database connection
@@ -60,8 +60,8 @@ app.use(sanitizeRequest)
 
 
 // logging middleware
-import morgan from "morgan";
-app.use(morgan("combined"));
+// import morgan from "morgan";
+// app.use(morgan("combined"));
 
 
 // cookie parser middleware
