@@ -76,5 +76,6 @@ jobs:
                 -e EMAIL_PASS="${{ secrets.EMAIL_PASS }}" \
                 -e EMAIL_USER="${{ secrets.EMAIL_USER }}" \
                 -e REDIS_URL="${{ secrets.REDIS_URL }}" \
+                -e PRiVATE_API_KEY="${{ secrets.PRiVATE_API_KEY }}" \
                     ${{ secrets.DOCKER_USERNAME }}/devloadbackend:latest
 
