@@ -1,18 +1,18 @@
 import rateLimit, { ipKeyGenerator } from "express-rate-limit";
-import { Model} from '../models/index.js'
+import { Model } from '../models/index.js'
 
 const memberLimit = rateLimit({
-  windowMs: 60 * 1000,
-  max: 400,
-  message: "Request bhaut zyada ho gaya",
-  keyGenerator: ipKeyGenerator,
+    windowMs: 60 * 1000,
+    max: 400,
+    message: "Request bhaut zyada ho gaya",
+    keyGenerator: ipKeyGenerator,
 });
 
 const freeLimit = rateLimit({
-  windowMs: 60 * 1000,
-  max: 150,
-  message: "Request bhaut zyada ho gaya",
-  keyGenerator: ipKeyGenerator,
+    windowMs: 60 * 1000,
+    max: 150,
+    message: "Request bhaut zyada ho gaya",
+    keyGenerator: ipKeyGenerator,
 });
 
 const authorizeFileAccess = async (req, res, next) => {
@@ -29,9 +29,13 @@ const authorizeFileAccess = async (req, res, next) => {
         if (!file) {
             return res.status(400).json({ message: "file not exist" });
         }
-        
-        if(file.status === 'deleted'){
-            return res.status(400).json({ message: "file deleted" });
+
+        if (file.projectid.isActive !== "active") {
+            return res.status(409).json({ message: "project not active" });
+        }
+
+        if (file.status === 'deleted') {
+            return res.status(400).json({ message: "file not exist" });
         }
 
         const user = file.owner?.status;
