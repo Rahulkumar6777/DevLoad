@@ -64,7 +64,7 @@ const privateRoutesVerifier = async (req, res, next) => {
 
 
         if (projectfind.isActive !== 'active') {
-            return res.status(500).json({
+            return res.status(409).json({
                 message: "Project not active"
             })
         }
