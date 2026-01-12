@@ -6,3 +6,4 @@ import "./slice/accountdeleteworker.js"
 import "./slice/Welcome.worker.js"
 import "./slice/sendLoginMailWorker.js"
 import './slice/ban.worker.js'
+import "./slice/unban.Worker.js"
