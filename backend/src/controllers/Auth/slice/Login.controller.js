@@ -21,6 +21,7 @@ const LoginValidate = [
 
 const loginAlertQueue = makeQueue('loginAlert');
 const banAlertQueue = makeQueue('banAlert');
+const unBanAlert = makeQueue('unBanAlert');
 
 const Login = async (req, res) => {
     try {
@@ -43,7 +44,7 @@ const Login = async (req, res) => {
             });
         }
 
-        if(user.status === 'deleted'){
+        if (user.status === 'deleted') {
             return res.status(403).json({
                 message: "Your Account is deleted"
             })
@@ -103,8 +104,22 @@ const Login = async (req, res) => {
                 });
                 const now = Date.now()
 
-                user.suspensionEnd = now + 60 * 60 * 1000;
+                const endSuspension = process.env.NODE_ENV === 'production' ? now + 60 * 60 * 1000 : now + 2 * 60 * 1000;
+                user.suspensionEnd = endSuspension
                 user.status = "banned";
+
+                await unBanAlert.add(
+                    "unBanAlert",
+                    {
+                        fullname: user.fullName,
+                        email: user.email,
+                        userId: user._id
+                    },
+                    {
+                        delay: endSuspension - Date.now(),
+                        removeOnComplete: true,
+                    }
+                );
 
                 await user.save({ validateBeforeSave: false })
                 return res.status(429).json({
