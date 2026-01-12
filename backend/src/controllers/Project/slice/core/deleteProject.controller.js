@@ -27,7 +27,7 @@ export const deleteProject = async (req, res) => {
             })
         }
 
-        const storageUsedByProject = project.storageUsed.toFixed(2)
+        const storageUsedByProject = project.storageUsed
         await Model.User.updateOne(
             { _id: userId },
             { $inc: { storageUsed: -storageUsedByProject, currentProject: -1 } }
@@ -39,10 +39,15 @@ export const deleteProject = async (req, res) => {
 
         const tempCleanupAt = process.env.NODE_ENV === 'production' ? Date.now() + 1 * 60 * 60 * 1000 : Date.now() + 3 * 60 * 1000
 
+        const reamin = req.user.storageUsed - storageUsedByProject
         await projectDeleteworker.add(
             "projectDeleteQueue",
             {
                 projectId: projectid,
+                fullname: req.user.fullName,
+                email: req.user.email,
+                projectName: project.projectname,
+                remainingStorage: req.user.maxStorage - reamin
             },
             {
                 delay: tempCleanupAt - Date.now(),
