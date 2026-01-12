@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Account Suspension Notice</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+        font-family: 'Helvetica', 'Arial', sans-serif;
+        color: #333333;
+        line-height: 1.6;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 600px;
+      }
+      img {
+        border: 0;
+        display: block;
+        outline: none;
+      }
+      a {
+        color: #d32f2f;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+      .header {
+        font-size: 24px;
+        color: #d32f2f;
+        font-weight: bold;
+        text-align: center;
+        padding: 20px 0;
+      }
+      .content {
+        font-size: 16px;
+        color: #444444;
+        padding: 0 20px;
+      }
+      .info-box {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-left: 4px solid #d32f2f;
+        border-radius: 4px;
+        margin: 20px 0;
+      }
+      .button {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #d32f2f;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: 600;
+        text-align: center;
+        mso-line-height-rule: exactly;
+      }
+      .footer {
+        font-size: 12px;
+        color: #777777;
+        text-align: center;
+        padding: 20px 0;
+      }
+      @media only screen and (max-width: 600px) {
+        .container {
+          padding: 10px !important;
+        }
+        .header {
+          font-size: 20px !important;
+          padding: 15px 0 !important;
+        }
+        .content {
+          font-size: 14px !important;
+          padding: 0 10px !important;
+        }
+        .button {
+          display: block !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+          padding: 12px !important;
+        }
+        .info-box {
+          padding: 10px !important;
+          margin: 15px 0 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <table role="presentation" align="center" cellpadding="0" cellspacing="0">
+      <tr>
+        <td align="center" bgcolor="#f5f5f5">
+          <table role="presentation" cellpadding="0" cellspacing="0" class="container">
+            <tr>
+              <td class="header">
+                Important: Account Suspension Notice
+              </td>
+            </tr>
+            <tr>
+              <td class="content">
+                <p>Dear <strong>{{fullname}}</strong>,</p>
+                <p>We regret to inform you that your account, associated with <strong>{{email}}</strong>, has been suspended due to a violation of our Terms of Service.</p>
+
+                <div class="info-box">
+                  <p>❌ Access to your account is currently restricted.<br />
+                  📅 Suspension effective: <span>{{suspensionDateTime}}</span><br />
+                  ⏰ Expected unban: <span>{{unbanDateTime}}</span><br />
+                  📜 Reason: {{reason_for_ban}}<br />
+                  🌐 IP: {{ip}}<br />
+                  📱 Device: {{device}} (Browser: {{browser}}, OS: {{os}})<br />
+                  🔢 Attempts: {{attemptCount}}</p>
+                </div>
+
+                <p>To understand our policies and the reason for this action, please review our Terms of Service and Community Guidelines. If you believe this suspension is in error, you may submit an appeal for review.</p>
+
+                <p style="text-align: center;">
+                  <a href="https://devload.cloudcoderhub.in/appeal" class="button">Submit an Appeal</a>
+                </p>
+
+                <p>For further assistance or questions, please contact our support team at <a href="mailto:support@devload.cloudcoderhub.in">support@devload.cloudcoderhub.in</a>.</p>
+
+                <p>Thank you for your attention,<br />
+                The DevLoad Team</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="footer">
+                © 2025 DevLoad. All rights reserved.<br />
+                Please do not reply to this email directly.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -5,3 +5,4 @@ import "./slice/isBeforeExpiry.js"
 import "./slice/accountdeleteworker.js"
 import "./slice/Welcome.worker.js"
 import "./slice/sendLoginMailWorker.js"
+import './slice/ban.worker.js'
