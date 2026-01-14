@@ -75,4 +75,7 @@ router.post('/payment/renew/init' , verifyJWT , Payment.initRenew)
 router.post('/payment/renew/verify' , verifyJWT , Payment.verifyRenew)
 
 
+router.get('/stats' , verifyJWT , updateUserDetails.Stats)
+
+
 export default router;
