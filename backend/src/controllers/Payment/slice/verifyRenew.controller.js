@@ -1,7 +1,7 @@
 import * as crypto from 'crypto'
 import { Model } from '../../../models/index.js';
 import { makeQueue } from '../../../utils/makeQueue.js';
-import { subscriptionExpire } from './verify.controller.js';
+import { subscriptionExpire, subscriptionStart, isBeforeExpiryNotify } from './verify.controller.js';
 
 const verifyRenew = async (req, res) => {
 
@@ -64,11 +64,10 @@ const verifyRenew = async (req, res) => {
                 userid: orderfromdb.userid,
                 oderid: orderfromdb.oderid,
                 months: orderfromdb.months,
-                amount: orderfromdb.finalAmount,
+                amount: orderfromdb.amount,
                 status: 'completed'
             })
 
-            const isBeforeExpiryNotify = makeQueue("isBeforeExpiryQueue")
             await isBeforeExpiryNotify.add("isBeforeExpiryQueue",
                 {
                     userId: req.user._id
@@ -82,8 +81,27 @@ const verifyRenew = async (req, res) => {
             const job = await subscriptionExpire.getJob(req.user._id.toString());
             if (job) {
                 await job.remove();
-                console.log("job removed")
             }
+            
+            await subscriptionExpire.add("subscriptionend",
+                {
+                    userId: req.user._id
+                }, {
+                jobId: req.user._id.toString(),
+                delay: subscriptionend - Date.now()
+            }
+            )
+
+            await subscriptionStart.add("subscriptionstart",
+                {
+                    fullName: req.user.fullName,
+                    email: req.user.email,
+                    price: orderfromdb.amount / 100,
+                    duration: orderfromdb.months
+                }
+            )
+
+            console.log("verification Completed")
 
             return res.json({ success: true, userSubscribe: user.subscription, message: "Payment verified successfully!" });
         } else {

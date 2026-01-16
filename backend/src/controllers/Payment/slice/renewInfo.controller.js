@@ -5,7 +5,6 @@ export const renewInfo = async (req, res) => {
         const userId = req.user._id;
 
         const previousOrder = await Model.CompletedOrder.findOne({userid: userId});
-        console.log(previousOrder)
         if(!previousOrder){
             return res.status(400).json({
                 message: "you are not eligible for renew"

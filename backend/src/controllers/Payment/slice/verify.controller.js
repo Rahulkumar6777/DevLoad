@@ -4,8 +4,9 @@ import { Model } from '../../../models/index.js';
 import { makeQueue } from "../../../utils/makeQueue.js"
 import { delay } from 'bullmq';
 
-
+const subscriptionStart = makeQueue("subscriptionstart")
 const subscriptionExpire = makeQueue("subscriptionend")
+const isBeforeExpiryNotify = makeQueue("isBeforeExpiryQueue")
 
 const paymentVerify = async (req, res) => {
 
@@ -58,9 +59,6 @@ const paymentVerify = async (req, res) => {
             const isBeforeExpiryDate = process.env.NODE_ENV === "production" ? new Date(now.getTime() + months * 25 * 24 * 60 * 60 * 1000) : new Date(now.getTime() + 2 * 60 * 1000)
 
 
-
-            console.log("User found:", user.fullname);
-
             const projectdata = await Model.Project.findOne({ userid: user._id })
 
 
@@ -94,14 +92,15 @@ const paymentVerify = async (req, res) => {
                 userid: orderfromdb.userid,
                 oderid: orderfromdb.oderid,
                 months: orderfromdb.months,
-                amount: orderfromdb.finalAmount,
+                amount: orderfromdb.amount,
                 status: 'completed'
             })
 
-            const isBeforeExpiryNotify = makeQueue("isBeforeExpiryQueue")
             await isBeforeExpiryNotify.add("isBeforeExpiryQueue",
                 {
-                    userId: req.user._id
+                    userId: req.user._id,
+                    email: req.user.email,
+                    fullname: req.user.fullName
                 }, {
                 delay: isBeforeExpiryDate - Date.now(),
                 jobId: req.user._id.toString(),
@@ -109,7 +108,16 @@ const paymentVerify = async (req, res) => {
             }
             )
 
-            
+
+            await subscriptionStart.add("subscriptionstart",
+                {
+                    fullName: req.user.fullName,
+                    email: req.user.email,
+                    price: orderfromdb.amount / 100,
+                    duration: orderfromdb.months
+                }
+            )
+
             await subscriptionExpire.add("subscriptionend",
                 {
                     userId: req.user._id
@@ -130,4 +138,4 @@ const paymentVerify = async (req, res) => {
 
 }
 
-export { paymentVerify , subscriptionExpire}
+export { paymentVerify, subscriptionExpire, subscriptionStart, isBeforeExpiryNotify }

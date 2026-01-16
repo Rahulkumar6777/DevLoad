@@ -7,3 +7,4 @@ import "./slice/Welcome.worker.js"
 import "./slice/sendLoginMailWorker.js"
 import './slice/ban.worker.js'
 import "./slice/unban.Worker.js"
+import "./slice/subscriptionStart.worker.js"
